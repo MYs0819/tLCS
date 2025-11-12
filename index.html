@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>📝勞工名卡建檔表</title>
+  <title>📝 勞工名卡建檔表</title>
 
   <style>
   :root {
@@ -55,13 +55,13 @@
     --panel-bg: linear-gradient(0deg,rgba(64,55,55,1) 0%, rgba(43,37,37,1) 37%, rgba(0,0,0,1) 100%); /* 預設灰黑 */
 
     /*//* --------第10頁：範例圖片尺寸/外觀（可自行調整；新增）--------*/*/
-    --sample-gap: 10px;         /* 左右兩張圖片之間的間距（可調） */
+    --sample-gap: 10px;         /* 左右/上下兩張圖片間距（可調） */
     --sample-max-h: 180px;      /* 圖片最大高度（可調：放不下自動縮小） */
     --sample-pad: 8px;          /* 每張圖外框內距（可調） */
     --sample-bg: rgba(255,255,255,0.04); /* 圖片外框底色（可調） */
     --sample-radius: 12px;      /* 圖片外框圓角（可調） */
 
-    /* 新增：欄位實際字色（避免裝置上出現黑字看不到） */
+    /*（保留）--field-ink 原先使用；本版改為跟 ⏍ 提示同色：--muted */
     --field-ink: #d1cfcf;
   }
 
@@ -76,7 +76,7 @@
   /* ===== 全站背景底色 ===== */
   html, body { height: 100%; margin: 0; overflow-x: hidden; }
   body {
-    /*//* --------全域字體堆疊（以源泉圓體為主）--------*/*/
+    /*//* --------全域字體堆疊（以源泉圓體為主；新增）--------*/*/
     font-family:
       "GenSenRounded",
       "Yuanti TC",
@@ -232,24 +232,24 @@
     border-radius: var(--control-radius);
     outline: none;
 
-    /* 重要：輸入框/選單內文字改為你指定的顏色 #d1cfcf */
-    color: var(--field-ink);
+    /*（依需求）輸入框/選單內文字顏色＝ ⏍ 提示同色 */
+    color: var(--muted);
     font-size: var(--input-size);
 
     height: var(--input-height);
     box-sizing: border-box;
   }
 
-  /* 下拉選單的選項文字也強制為 #d1cfcf（避免裝置預設黑字） */
+  /* 下拉選單與選項文字都強制為 ⏍ 同色（避免裝置預設黑字） */
   select, select option { 
-    color: var(--field-ink) !important; 
+    color: var(--muted) !important; 
     background: var(--control-bg);
   }
 
-  /* placeholder 也一併改成 #d1cfcf，避免看不到 */
+  /* placeholder 也同 ⏍ 顏色 */
   input::placeholder { 
     font-size: var(--placeholder-size);
-    color: var(--field-ink);
+    color: var(--muted);
   }
 
   input:focus, select:focus {
@@ -263,12 +263,27 @@
   /* 讓「只有是/否」的頁面維持與內容相同大小（不受 label 13px 影響） */
   .radio-row label { font-size: var(--content-size); font-weight: 700; }
 
-  /* iOS Safari 自動放大防呆（僅作用在登入遮罩的密碼欄；避免一開始整頁放大） */
+  /* iOS Safari 自動放大防呆（僅作用在登入遮罩的密碼欄；避免一開始整頁放大；保留註解） */
+  /* 
   @supports (-webkit-touch-callout: none) {
-    .gate #gatePwd { font-size: 16px; }
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"],
+    textarea { font-size: 16px; } 
+  }
+  */
+  /*（新增）iOS 全欄位防放大：在 iOS 上把可輸入元件字級設為 16px，避免點擊自動縮放 */
+  @supports (-webkit-touch-callout: none) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="file"],
+    select,
+    textarea { font-size: 16px; }
+    .gate #gatePwd { font-size: 16px; } /* 登入鎖同樣處理 */
   }
 
-  /* 強制 select 仍用 12px 與 ⏍ 同色（覆蓋可能的環境差異；保留註解） */
+  /* 強制 select 字級與 ⏍ 同色（覆蓋可能的環境差異；保留註解） */
   select { font-size: var(--input-size) !important; }
 
   /* 檔案上傳（同高） */
@@ -304,6 +319,19 @@
     font-size: var(--content-size);
     min-height: var(--input-height);
     display: inline-flex; align-items: center;
+  }
+
+  /* 小縮圖預覽（新增） */
+  .file-preview{
+    display:none;
+    margin-top: 8px;
+    max-height: 120px;
+    width: 100%;
+    object-fit: contain;
+    border: 1px dashed var(--control-border);
+    border-radius: 8px;
+    padding: 4px;
+    background: rgba(255,255,255,0.02);
   }
 
   /* 只縮小「上一頁 / 下一頁」兩顆按鈕，也套用到完成鍵 */
@@ -395,10 +423,10 @@
   /* 第13頁：完成頁 */
   .step[data-page="13"]{ --title-size: 15px; --content-size: 12px; }
 
-  /* 第10頁：範例圖片樣式（左右排、可自動縮小） */
+  /* 第10頁：範例圖片樣式 —— 改為上下排列（原本為左右兩欄） */
   .samples { 
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 左右兩欄，固定不換行（需求：不要上下） */
+    grid-template-columns: 1fr; /* 改為單欄：上下排列 */
     gap: var(--sample-gap);
     align-items: start;
     margin-top: 10px; /* 與上方文字間距 */
@@ -425,7 +453,7 @@
     text-align: center;
   }
 
-  /* ====== 登入遮罩樣式 ====== */
+  /* ====== 登入遮罩樣式（沿用樣式當密碼鎖） ====== */
   .gate {
     position: fixed; inset: 0; z-index: 9999;
     background: rgba(0,0,0,0.75);
@@ -683,7 +711,7 @@
         </div>
       </section>
 
-      <!-- 第9頁：眷屬加保 -->
+      <!-- 第9頁：眷屬加保（條件欄位；生日同 7 碼規則） -->
       <section class="step" data-page="9" id="step-9">
         <div class="row">
           <label for="depEnable">© 眷屬是否依附加保</label>
@@ -722,7 +750,7 @@
         </div>
       </section>
 
-      <!-- 第10頁：上傳檔案 -->
+      <!-- 第10頁：⏫ 上傳檔案 -->
       <section class="step" data-page="10" id="step-10">
         <h2>⏫ 上傳檔案</h2>
         <ol class="note-list">
@@ -731,7 +759,7 @@
           <li>檔案須符合本公司限定規格.</li>
         </ol>
 
-        <!-- //* --------第10頁：範例圖片區--------*// -->
+        <!-- //* --------第10頁：範例圖片區（改為上下排列）--------*// -->
         <div class="samples" aria-label="身分證範本">
           <figure class="sample-box">
             <img class="sample-img" src="assets/身分證範本-正面.jpg" alt="❗️範例-身分證上傳限定規格-正面">
@@ -751,7 +779,7 @@
             <label><input type="radio" name="agreeUpload" value="yes"> 是</label>
             <label><input type="radio" name="agreeUpload" value="no"> 否</label>
           </div>
-          <div class="error" id="errAgreeUpload">⚠️ 需同意才能繼續填寫</div>
+          <div class="error" id="errAgreeUpload">⚠️ 需同意才可繼續填寫</div>
         </div>
       </section>
 
@@ -763,8 +791,11 @@
             <span class="file-btn">選擇檔案</span>
             <input id="idFront" type="file" accept=".pdf,image/*" />
           </label>
-        <div class="file-name" id="nameFront">尚未選取檔案</div>
+          <div class="file-name" id="nameFront">尚未選取檔案</div>
         </div>
+        <!-- 小縮圖預覽：正面（新增） -->
+        <img id="previewFront" class="file-preview" alt="預覽：身分證正面（影像檔顯示）" />
+
         <div class="error" id="errFront">⚠️ 請選擇身分證正面檔案</div>
 
         <div class="file-row">
@@ -775,6 +806,9 @@
           </label>
           <div class="file-name" id="nameBack">尚未選取檔案</div>
         </div>
+        <!-- 小縮圖預覽：反面（新增） -->
+        <img id="previewBack" class="file-preview" alt="預覽：身分證反面（影像檔顯示）" />
+
         <div class="error" id="errBack">⚠️ 請選擇身分證反面檔案</div>
 
         <div class="fieldset">
@@ -809,7 +843,7 @@
 
       <!-- 第13頁：完成 -->
       <section class="step" data-page="13" id="step-13">
-        <h2>✅ 全數完成</h2> <!-- 修正：合法 h2 標籤 -->
+        <h2>✅ 全數完成</h2>
         <div style="text-align:center; line-height:1.8;">
           © 勞工名卡登記表
           <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
@@ -843,6 +877,7 @@
   </div>
 
 <script>
+/* <======== 檔案用途：系統共用常數、簽章工具、小工具、固定頁籤定位 ======== > */
 
 /* --------系統常數（可調）-------- */
 const TOTAL_STEPS = 13;  /* 總頁數（顯示用；更新為 13；新增） */
@@ -851,7 +886,7 @@ const ACCESS_PWD = "19860819"; /* 新增：進入密碼（可調） */
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-/* --------表單時間戳）-------- */
+/* 新增：表單時間戳（建立/更新） */
 const FORM_META = { createdAt: null, updatedAt: null };
 function fmtTW(d){
   try{
@@ -870,7 +905,7 @@ function updateStampUI(){
   if(u){ u.textContent = FORM_META.updatedAt ? fmtTW(FORM_META.updatedAt) : "—"; }
 }
 
-/* ====== 密碼進入遮罩 ====== */
+/* ====== 密碼進入遮罩（移除信箱登入，改為密碼驗證；置中已於 CSS 處理） ====== */
 (function passGateInit(){
   const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err=$("#gatePwdErr");
   if(!gate) return;
@@ -1221,6 +1256,10 @@ function clearCurrentPage(){
     $("#idFront").value=""; $("#idBack").value="";
     $("#nameFront").textContent="尚未選取檔案";
     $("#nameBack").textContent="尚未選取檔案";
+    /* 同步清空預覽（新增） */
+    const pf=$("#previewFront"), pb=$("#previewBack");
+    if(pf){ pf.src=""; pf.style.display="none"; }
+    if(pb){ pb.src=""; pb.style.display="none"; }
   }
   cur.querySelectorAll('.error').forEach(e=> e.style.display="none");
   if(cur.id==="step-1"){ $("#exitMsg").classList.remove("show"); }
@@ -1348,6 +1387,28 @@ function bindLiveValidation(){
       markTouched(el.id);
       $("#nameFront").textContent = ($("#idFront").files?.[0]?.name)||"尚未選取檔案";
       $("#nameBack").textContent  = ($("#idBack").files?.[0]?.name)||"尚未選取檔案";
+
+      /*（新增）預覽小圖：僅顯示影像檔 */
+      const pf = $("#previewFront");
+      const pb = $("#previewBack");
+      const f  = $("#idFront").files?.[0] || null;
+      const b  = $("#idBack").files?.[0] || null;
+
+      function setPreview(imgEl, file){
+        if(!imgEl) return;
+        if(file && file.type && file.type.startsWith("image/")){
+          const url = URL.createObjectURL(file);
+          imgEl.src = url;
+          imgEl.style.display = "block";
+          imgEl.onload = ()=> URL.revokeObjectURL(url);
+        }else{
+          imgEl.src = "";
+          imgEl.style.display = "none";
+        }
+      }
+      setPreview(pf, f);
+      setPreview(pb, b);
+
       updateNavState();
     });
   });
