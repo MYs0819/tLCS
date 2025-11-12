@@ -34,6 +34,10 @@
     --actionbar-h: 64px;        /* 底部固定操作列高度（可調） */
     --footer-h: 44px;           /* 頁尾高度（可調） */
     --kv-offset: 0px;           /* 鍵盤彈出時向上位移量（JS 寫入） */
+
+    /* 新增：上一頁/下一頁縮小用（可調） */
+    --nav-btn-min-h: 36px;      /* 只影響「上一頁 / 下一頁」兩顆按鈕的最小高度（可調） */
+    --nav-btn-pad: 6px 10px;    /* 只影響「上一頁 / 下一頁」兩顆按鈕的內距（可調） */
   }
 
   /* ===== 全站背景底色 ===== */
@@ -70,7 +74,7 @@
   /* 面板背景分組（依頁碼切換） */
   .container[data-group="g1"]{
     /*//* --------配色（第1~6頁：灰黑；可自行調整）--------*/*/
-    background: linear-gradient(0deg,rgba(64,55,55,1) 0%, rgba(43,37,37,1) 37%, rgba(0,0,0,1) 100%);
+    background: linear-gradient(0deg,rgba(64,55,55,1) 0%, rgba(43,37,37,1) 43%, rgba(0,0,0,1) 100%);
   }
   .container[data-group="g2"]{
     /*//* --------配色（第7~9頁：紅系；可自行調整）--------*/*/
@@ -181,7 +185,7 @@
     border-color: var(--control-focus);
     box-shadow: 0 0 0 3px rgba(96,165,250,.25);
   }
-  .error { color: var(--danger); margin-top: 6px; font-size: var(--content-size); }
+  .error { color: var(--danger); margin-top: 6px; font-size: var(--content-size); display:none; } /* 初始隱藏 */
 
   /* 檔案上傳（同高） */
   .file-row {
@@ -216,6 +220,12 @@
     font-size: var(--content-size);
     min-height: var(--input-height);
     display: inline-flex; align-items: center;
+  }
+
+  /* 新增：只縮小「上一頁 / 下一頁」兩顆按鈕 */
+  .btn--nav { 
+    min-height: var(--nav-btn-min-h); /* 可調：上一頁/下一頁按鈕高度 */
+    padding: var(--nav-btn-pad);      /* 可調：上一頁/下一頁按鈕內距 */
   }
 
   /* 底部固定操作列（全頁共用） */
@@ -296,7 +306,8 @@
   /*//* --------配色／字級設定區（第12頁：完成頁，可自行調整；新增）--------*/*/
   .step[data-page="12"]{ --title-size: 15px; --content-size: 12px; }
 
-  /* ====== Gmail 登入遮罩（假登入關卡）====== */
+  /* ====== Gmail 登入遮罩（假登入關卡）======
+     （已移除信箱登入；沿用樣式用於「密碼進入遮罩」） */
   .gate {
     position: fixed; inset: 0; z-index: 9999;
     background: rgba(0,0,0,0.75);
@@ -318,18 +329,18 @@
   </style>
 </head>
 <body>
-  <!-- Gmail 假登入關卡 -->
-  <div class="gate" id="gate">
+  <!-- 新增：密碼進入遮罩（移除信箱登入） -->
+  <div class="gate" id="passGate">
     <div class="gate-card">
-      <h3>須使用 Gmail 登入後才能填寫</h3>
-      <p>（之後將串接 Google 試算表寫入）</p>
+      <h3>請輸入進入密碼後開始填寫</h3>
+      <p>（管理者提供的臨時密碼）</p>
       <div class="row">
-        <label for="gateEmail">Gmail 帳號 <small>⏍ 請使用全小寫 @gmail.com</small></label>
-        <input id="gateEmail" type="email" placeholder="例如：example@gmail.com（小寫）" />
-        <div class="error" id="gateErr" style="display:none;">請輸入有效的 Gmail（全小寫）。</div>
+        <label for="gatePwd">進入密碼 <small>⏍ 正確後才能進入第1頁</small></label>
+        <input id="gatePwd" type="password" placeholder="請輸入密碼" />
+        <div class="error" id="gatePwdErr">密碼錯誤，請再試一次。</div>
       </div>
       <div class="gate-actions">
-        <button class="btn" id="gateStart" type="button">開始填寫</button>
+        <button class="btn" id="gatePwdStart" type="button">開始填寫</button>
       </div>
     </div>
   </div>
@@ -367,7 +378,7 @@
         <div class="row">
           <label for="corp">© 公司名稱 <small>⏍ 請詢問清楚後點選店名</small></label>
           <input id="corp" type="text" placeholder="請輸入公司名稱/店名..." />
-          <div class="error" id="errCorp" style="display:none;">⚠️此欄位不得為空</div>
+          <div class="error" id="errCorp">⚠️此欄位不得為空</div>
         </div>
 
         <div class="row">
@@ -381,7 +392,7 @@
             <option>公關-Public Relations Teams</option>
             <option>其他-Other</option>
           </select>
-          <div class="error" id="errTeam" style="display:none;">⚠️尚未選擇隸屬團隊</div>
+          <div class="error" id="errTeam">⚠️尚未選擇隸屬團隊</div>
         </div>
 
         <div class="row">
@@ -391,19 +402,19 @@
             <option>正職/全時工時-Full Time</option>
             <option>兼職/部分工時-Part Time</option>
           </select>
-          <div class="error" id="errWorkType" style="display:none;">⚠️尚未選擇工作型態</div>
+          <div class="error" id="errWorkType">⚠️尚未選擇工作型態</div>
         </div>
 
         <div class="row">
           <label for="startDate">© 到職日期 <small>⏍ 請以YYYY-MM-DD格式填寫</small></label>
           <input id="startDate" type="text" placeholder="範例：2025-11-12" />
-          <div class="error" id="errStartDate" style="display:none;">⚠️日期格式錯誤或不存在</div>
+          <div class="error" id="errStartDate">⚠️日期格式錯誤或不存在</div>
         </div>
 
         <div class="row">
           <label for="wage">© 約定工資 <small>⏍ 千分位須逗號，且逗號必為半形且位置須正確</small></label>
           <input id="wage" type="text" placeholder="範例：40,000或200" />
-          <div class="error" id="errWage" style="display:none;">⚠️請輸入正確格式</div>
+          <div class="error" id="errWage">⚠️請輸入正確格式</div>
         </div>
       </section>
 
@@ -420,7 +431,7 @@
             <label><input type="radio" name="agreeInfo" value="yes"> 是</label>
             <label><input type="radio" name="agreeInfo" value="no"> 否</label>
           </div>
-          <div class="error" id="errAgreeInfo" style="display:none;">⚠️需同意才能繼續填寫</div>
+          <div class="error" id="errAgreeInfo">⚠️需同意才能繼續填寫</div>
         </div>
       </section>
 
@@ -429,7 +440,7 @@
         <div class="row">
           <label for="fullName">© 本名</label>
           <input id="fullName" type="text" placeholder="請輸入本名..." />
-          <div class="error" id="errFullName" style="display:none;">⚠️此欄位不得為空</div>
+          <div class="error" id="errFullName">⚠️此欄位不得為空</div>
         </div>
 
         <div class="row">
@@ -440,13 +451,13 @@
             <option>女</option>
             <option>多元</option>
           </select>
-          <div class="error" id="errGender" style="display:none;">⚠️尚未請選擇性別</div>
+          <div class="error" id="errGender">⚠️尚未請選擇性別</div>
         </div>
 
         <div class="row">
           <label for="nid">© 身分證字號 <small>⏍ 共計10碼</small></label>
           <input id="nid" type="text" placeholder="範例：A123456789" />
-          <div class="error" id="errNid" style="display:none;">⚠️填寫或格式錯</div>
+          <div class="error" id="errNid">⚠️填寫或格式錯</div>
         </div>
       </section>
 
@@ -455,25 +466,25 @@
         <div class="row">
           <label for="birthRoc7">© 民國出生年月日 <small>⏍ 請以yyyMMdd格式填寫</small></label>
           <input id="birthRoc7" type="text" placeholder="範例：1121008或0750819" />
-          <div class="error" id="errBirthRoc7" style="display:none;">⚠️格式須為7碼yyyMMdd</div>
+          <div class="error" id="errBirthRoc7">⚠️格式須為7碼yyyMMdd</div>
         </div>
 
         <div class="row">
           <label for="birthPlace">© 出生地 <small>⏍ 身分證背面的出生地</small></label>
           <input id="birthPlace" type="text" placeholder="請輸入出生地..." />
-          <div class="error" id="errBirthPlace" style="display:none;">⚠️此欄位不得為空。</div>
+          <div class="error" id="errBirthPlace">⚠️此欄位不得為空。</div>
         </div>
 
         <div class="row">
           <label for="addrHouse">© 戶籍地址 <small>⏍ 身分證背面包含里及鄰都須填寫</small></label>
           <input id="addrHouse" type="text" placeholder="請輸入戶籍地址" />
-          <div class="error" id="errAddrHouse" style="display:none;">⚠️此欄位不得為空。</div>
+          <div class="error" id="errAddrHouse">⚠️此欄位不得為空。</div>
         </div>
 
         <div class="row">
           <label for="addrLive">© 居住地址 <small>⏍ 勿填寫同戶籍地</small></label>
           <input id="addrLive" type="text" placeholder="請輸入居住地址..." />
-          <div class="error" id="errAddrLive" style="display:none;">⚠️不得為空，且不得填同戶籍地</div>
+          <div class="error" id="errAddrLive">⚠️不得為空，且不得填同戶籍地</div>
         </div>
       </section>
 
@@ -482,19 +493,19 @@
         <div class="row">
           <label for="gmail">© Gmail <small>⏍ 限定Gmail並全程小寫</small></label>
           <input id="gmail" type="email" placeholder="請輸入mail..." />
-          <div class="error" id="errGmail" style="display:none;">⚠️請輸入有效Gmail並使用小寫</div>
+          <div class="error" id="errGmail">⚠️請輸入有效Gmail並使用小寫</div>
         </div>
 
         <div class="row">
           <label for="mobile">© 聯絡手機 <small>⏍ 格式需為09xx-xxx-xxx</small></label>
           <input id="mobile" type="text" placeholder="範例：0912-345-647" />
-          <div class="error" id="errMobile" style="display:none;">⚠️格式錯誤</div>
+          <div class="error" id="errMobile">⚠️格式錯誤</div>
         </div>
 
         <div class="row">
           <label for="edu">© 最高學歷 <small>⏍ 如就讀中請再學校成稱後加上(在學)</small></label>
           <input id="edu" type="text" placeholder="請輸入最高學歷..." />
-          <div class="error" id="errEdu" style="display:none;">⚠️此欄位不得為空</div>
+          <div class="error" id="errEdu">⚠️此欄位不得為空</div>
         </div>
       </section>
 
@@ -511,7 +522,7 @@
             <label><input type="radio" name="agreeOther" value="yes"> 是</label>
             <label><input type="radio" name="agreeOther" value="no"> 否</label>
           </div>
-          <div class="error" id="errAgreeOther" style="display:none;">⚠️需同意才能繼續填寫</div>
+          <div class="error" id="errAgreeOther">⚠️需同意才能繼續填寫</div>
         </div>
       </section>
 
@@ -520,31 +531,31 @@
         <div class="row">
           <label for="emgName">© 緊急連絡人</label>
           <input id="emgName" type="text" placeholder="請輸入姓名..." />
-          <div class="error" id="errEmgName" style="display:none;">⚠️此欄不得為空</div>
+          <div class="error" id="errEmgName">⚠️此欄不得為空</div>
         </div>
 
         <div class="row">
           <label for="emgRel">© 關係 <small>⏍ 範例：父子、姊妹</small></label>
           <input id="emgRel" type="text" placeholder="請填寫關係..." />
-          <div class="error" id="errEmgRel" style="display:none;">⚠️此欄不得為空</div>
+          <div class="error" id="errEmgRel">⚠️此欄不得為空</div>
         </div>
 
         <div class="row">
           <label for="homePhone">© 家用電話 <small>⏍ 若無填寫「無」</small></label>
           <input id="homePhone" type="text" placeholder="請輸入家用電話..." />
-          <div class="error" id="errHomePhone" style="display:none;">⚠️此欄不得為空</div>
+          <div class="error" id="errHomePhone">⚠️此欄不得為空</div>
         </div>
 
         <div class="row">
           <label for="emgMobile">© 連絡手機 <small>⏍ 格式須為09xx-xxx-xxx</small></label>
           <input id="emgMobile" type="text" placeholder="範例：0912-345-647" />
-          <div class="error" id="errEmgMobile" style="display:none;">⚠️格式錯誤</div>
+          <div class="error" id="errEmgMobile">⚠️格式錯誤</div>
         </div>
 
         <div class="row">
           <label for="emgAddr">© 聯絡地址 <small>⏍ ⏍ 勿填寫同戶籍地</small></label>
           <input id="emgAddr" type="text" placeholder="請輸入聯絡地址..." />
-          <div class="error" id="errEmgAddr" style="display:none;">⚠️不得為空，且不得填同戶籍地</div>
+          <div class="error" id="errEmgAddr">⚠️不得為空，且不得填同戶籍地</div>
         </div>
       </section>
 
@@ -557,32 +568,32 @@
             <option>是</option>
             <option>否</option>
           </select>
-          <div class="error" id="errDepEnable" style="display:none;">⚠️請選擇是否依附加保</div>
+          <div class="error" id="errDepEnable">⚠️請選擇是否依附加保</div>
         </div>
 
         <div id="depFields" style="display:none;">
           <div class="row">
             <label for="depRel">© 關係 <small>⏍ 範例：父子、姊妹</small></label>
             <input id="depRel" type="text" placeholder="請填寫關係..." />
-            <div class="error" id="errDepRel" style="display:none;">⚠️此欄不得為空</div>
+            <div class="error" id="errDepRel">⚠️此欄不得為空</div>
           </div>
 
           <div class="row">
             <label for="depName">© 姓名</label>
             <input id="depName" type="text" placeholder="請輸入姓名..." />
-            <div class="error" id="errDepName" style="display:none;">⚠️此欄不得為空</div>
+            <div class="error" id="errDepName">⚠️此欄不得為空</div>
           </div>
 
           <div class="row">
             <label for="depNid">© 身分證字號 <small>⏍ 共計10碼</small></label>
             <input id="depNid" type="text" placeholder="例如：A123456789" />
-            <div class="error" id="errDepNid" style="display:none;">⚠️填寫或格式錯誤</div>
+            <div class="error" id="errDepNid">⚠️填寫或格式錯誤</div>
           </div>
 
           <div class="row">
             <label for="depBirth7">© 民國出生年月日 <small>⏍ ⏍ 請以yyyMMdd格式填寫</small></label>
             <input id="depBirth7" type="text" placeholder="範例：1121008或0750819" />
-            <div class="error" id="errDepBirth7" style="display:none;">⚠️格式須為7碼yyyMMdd</div>
+            <div class="error" id="errDepBirth7">⚠️格式須為7碼yyyMMdd</div>
           </div>
         </div>
       </section>
@@ -601,7 +612,7 @@
             <label><input type="radio" name="agreeUpload" value="yes"> 是</label>
             <label><input type="radio" name="agreeUpload" value="no"> 否</label>
           </div>
-          <div class="error" id="errAgreeUpload" style="display:none;">⚠️需同意才能繼續填寫</div>
+          <div class="error" id="errAgreeUpload">⚠️需同意才能繼續填寫</div>
         </div>
       </section>
 
@@ -615,7 +626,7 @@
           </label>
           <div class="file-name" id="nameFront">尚未選取檔案</div>
         </div>
-        <div class="error" id="errFront" style="display:none;">⚠️請選擇正面檔案</div>
+        <div class="error" id="errFront">⚠️請選擇正面檔案</div>
 
         <div class="file-row">
           <div>身分證反面</div>
@@ -625,7 +636,7 @@
           </label>
           <div class="file-name" id="nameBack">尚未選取檔案</div>
         </div>
-        <div class="error" id="errBack" style="display:none;">⚠️請選擇反面檔案</div>
+        <div class="error" id="errBack">⚠️請選擇反面檔案</div>
 
         <div class="fieldset">
           <div class="checks">
@@ -649,6 +660,10 @@
           <div>❗️請截圖此畫面給承辦人。</div>
           <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
           <div>系統已收到資料，將進入處理排程，表單已填寫完畢。</div>
+          <!-- 新增：時間戳顯示（Created / Updated） -->
+          <div style="margin-top:10px;color:var(--muted);font-size:11px;">
+            建立時間：<span id="stampCreated">—</span>　最後更新：<span id="stampUpdated">—</span>
+          </div>
         </div>
       </section>
     </main>
@@ -659,8 +674,8 @@
         <button class="btn" id="btnClear" type="button">清除</button>
       </div>
       <div class="right-actions" style="display:flex; gap:10px;">
-        <button class="btn" id="btnPrev" type="button">上一頁</button>
-        <button class="btn" id="btnNext" type="button">下一頁</button>
+        <button class="btn btn--nav" id="btnPrev" type="button">上一頁</button>
+        <button class="btn btn--nav" id="btnNext" type="button">下一頁</button>
         <button class="btn" id="btnFinish" type="button">完成</button>
       </div>
     </div>
@@ -671,23 +686,45 @@
   </div>
 
 <script>
-/* <======== 檔案用途：系統常數、簽章工具、小工具、固定頁籤定位 ======== > */
+/* <======== 檔案用途：系統共用常數、簽章工具、小工具、固定頁籤定位 ======== > */
 
 /* --------系統常數（可調）-------- */
 const TOTAL_STEPS = 12;  /* 總頁數（顯示用） */
+const ACCESS_PWD = "19860819"; /* 新增：進入密碼（可調） */
 
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-/* ====== Gmail 假登入關卡 ====== */
-function isValidGmailLower(s){ return /^[a-z0-9._%+-]+@gmail\.com$/.test(s); }
-(function gateInit(){
-  const gate = $("#gate"), email = $("#gateEmail"), btn = $("#gateStart"), err=$("#gateErr");
+/* 新增：表單時間戳（建立/更新） */
+const FORM_META = { createdAt: null, updatedAt: null };
+function fmtTW(d){
+  try{
+    return new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Asia/Taipei'}).format(d);
+  }catch(e){ return d.toLocaleString(); }
+}
+function setCreatedNow(){
+  if(!FORM_META.createdAt){ FORM_META.createdAt = new Date(); updateStampUI(); }
+}
+function setUpdatedNow(){
+  FORM_META.updatedAt = new Date(); updateStampUI();
+}
+function updateStampUI(){
+  const c = $("#stampCreated"), u = $("#stampUpdated");
+  if(c){ c.textContent = FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : "—"; }
+  if(u){ u.textContent = FORM_META.updatedAt ? fmtTW(FORM_META.updatedAt) : "—"; }
+}
+
+/* ====== 密碼進入遮罩（移除信箱登入，改為密碼驗證） ====== */
+(function passGateInit(){
+  const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err=$("#gatePwdErr");
+  if(!gate) return;
+  err.style.display = "none";
   btn.addEventListener("click", ()=>{
-    const v = (email.value||"").trim();
-    if(!isValidGmailLower(v)){ err.style.display="block"; return; }
+    const v = (pwd.value||"").trim();
+    if(v !== ACCESS_PWD){ err.style.display="block"; return; }
     err.style.display="none";
     gate.style.display="none";
+    setCreatedNow(); /* 成功進入即紀錄建立時間 */
   });
 })();
 
@@ -698,11 +735,23 @@ function isValidGmailLower(s){ return /^[a-z0-9._%+-]+@gmail\.com$/.test(s); }
   function apply(){
     const bottomInset = (window.innerHeight - vv.height - vv.offsetTop);
     document.documentElement.style.setProperty('--kv-offset', bottomInset>0 ? `${bottomInset}px` : '0px');
+    autoFitActionbarHeight(); /* 新增：鍵盤變動時一併重量測 actionbar 高度 */
   }
   vv.addEventListener('resize', apply);
   vv.addEventListener('scroll', apply);
   apply();
 })();
+
+/* 新增：自動量測 actionbar 高度 → 寫回 --actionbar-h，讓內容可視區更大 */
+function autoFitActionbarHeight(){
+  const bar = $("#actionbar");
+  if(!bar) return;
+  const prev = bar.style.height;
+  bar.style.height = 'auto';                 /* 臨時放開固定高度 */
+  const h = bar.offsetHeight;                /* 以實際內容高度為準 */
+  document.documentElement.style.setProperty('--actionbar-h', `${h}px`);
+  bar.style.height = prev || 'var(--actionbar-h)'; /* 還原（或使用變數） */
+}
 
 /* ====== 焦點自動可視（避免被鍵盤或操作列擋住） ====== */
 (function focusAutoScroll(){
@@ -742,6 +791,11 @@ function isValidRoc7(str){
   return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
 }
 
+/* 新增：觸碰狀態（touched）與延後顯示錯誤邏輯（可調） */
+const TOUCHED = Object.create(null);
+function markTouched(id){ if(id) TOUCHED[id] = true; }
+function shouldShowErr(id, submit){ return !!submit || !!TOUCHED[id]; }
+
 /* ====== 步驟顯示與面板背景分組 ====== */
 let currentPage = 1;
 function pad2(n){ return String(n).padStart(2,'0'); }
@@ -760,8 +814,8 @@ function showStep(pageNumber){
   updateNavState();
 }
 
-/* ====== 各頁驗證 ====== */
-function validatePage(n){
+/* ====== 各頁驗證（submit=false：不顯示紅字；true：顯示紅字） ====== */
+function validatePage(n, submit=false){
   switch(n){
     case 1: {
       const yes = $('input[name="agree1"][value="yes"]').checked;
@@ -772,69 +826,141 @@ function validatePage(n){
     case 2: {
       let ok = true;
       const corp = $("#corp").value.trim();
-      if(!corp){ $("#errCorp").style.display="block"; ok=false; } else $("#errCorp").style.display="none";
+      const corpInvalid = corp==="";
+      $("#errCorp").style.display = (corpInvalid && shouldShowErr("corp", submit)) ? "block" : "none";
+      if(corpInvalid) ok=false;
 
-      if(!$("#team").value){ $("#errTeam").style.display="block"; ok=false; } else $("#errTeam").style.display="none";
-      if(!$("#workType").value){ $("#errWorkType").style.display="block"; ok=false; } else $("#errWorkType").style.display="none";
+      const teamInvalid = !$("#team").value;
+      $("#errTeam").style.display = (teamInvalid && shouldShowErr("team", submit)) ? "block" : "none";
+      if(teamInvalid) ok=false;
 
-      if(!isValidYMD($("#startDate").value.trim())) { $("#errStartDate").style.display="block"; ok=false; } else $("#errStartDate").style.display="none";
-      if(!isValidWageStrict($("#wage").value.trim())) { $("#errWage").style.display="block"; ok=false; } else $("#errWage").style.display="none";
+      const workTypeInvalid = !$("#workType").value;
+      $("#errWorkType").style.display = (workTypeInvalid && shouldShowErr("workType", submit)) ? "block" : "none";
+      if(workTypeInvalid) ok=false;
+
+      const startInvalid = !isValidYMD($("#startDate").value.trim());
+      $("#errStartDate").style.display = (startInvalid && shouldShowErr("startDate", submit)) ? "block" : "none";
+      if(startInvalid) ok=false;
+
+      const wageInvalid = !isValidWageStrict($("#wage").value.trim());
+      $("#errWage").style.display = (wageInvalid && shouldShowErr("wage", submit)) ? "block" : "none";
+      if(wageInvalid) ok=false;
+
       return ok;
     }
     case 3: {
       const yes = $('input[name="agreeInfo"][value="yes"]').checked;
-      $("#errAgreeInfo").style.display = yes ? "none":"block";
+      $("#errAgreeInfo").style.display = (!yes && shouldShowErr("agreeInfo", submit)) ? "block":"none";
       return yes;
     }
     case 4: {
       let ok = true;
-      if($("#fullName").value.trim()===""){ $("#errFullName").style.display="block"; ok=false; } else $("#errFullName").style.display="none";
-      if(!$("#gender").value){ $("#errGender").style.display="block"; ok=false; } else $("#errGender").style.display="none";
-      if(!isTenAlnum($("#nid").value.trim())){ $("#errNid").style.display="block"; ok=false; } else $("#errNid").style.display="none";
+      const fnInvalid = $("#fullName").value.trim()==="";
+      $("#errFullName").style.display = (fnInvalid && shouldShowErr("fullName", submit)) ? "block" : "none";
+      if(fnInvalid) ok=false;
+
+      const gInvalid = !$("#gender").value;
+      $("#errGender").style.display = (gInvalid && shouldShowErr("gender", submit)) ? "block" : "none";
+      if(gInvalid) ok=false;
+
+      const nidInvalid = !isTenAlnum($("#nid").value.trim());
+      $("#errNid").style.display = (nidInvalid && shouldShowErr("nid", submit)) ? "block" : "none";
+      if(nidInvalid) ok=false;
+
       return ok;
     }
     case 5: {
       let ok = true;
-      if(!isValidRoc7($("#birthRoc7").value.trim())){ $("#errBirthRoc7").style.display="block"; ok=false; } else $("#errBirthRoc7").style.display="none";
-      if($("#birthPlace").value.trim()===""){ $("#errBirthPlace").style.display="block"; ok=false; } else $("#errBirthPlace").style.display="none";
-      if($("#addrHouse").value.trim()===""){ $("#errAddrHouse").style.display="block"; ok=false; } else $("#errAddrHouse").style.display="none";
+      const b7Invalid = !isValidRoc7($("#birthRoc7").value.trim());
+      $("#errBirthRoc7").style.display = (b7Invalid && shouldShowErr("birthRoc7", submit)) ? "block" : "none";
+      if(b7Invalid) ok=false;
+
+      const bpInvalid = $("#birthPlace").value.trim()==="";
+      $("#errBirthPlace").style.display = (bpInvalid && shouldShowErr("birthPlace", submit)) ? "block" : "none";
+      if(bpInvalid) ok=false;
+
+      const ahInvalid = $("#addrHouse").value.trim()==="";
+      $("#errAddrHouse").style.display = (ahInvalid && shouldShowErr("addrHouse", submit)) ? "block" : "none";
+      if(ahInvalid) ok=false;
+
       const live = $("#addrLive").value.trim();
-      if(live==="" || /同戶籍地|同戶籍/.test(live)){ $("#errAddrLive").style.display="block"; ok=false; } else $("#errAddrLive").style.display="none";
+      const alInvalid = (live==="") || /同戶籍地|同戶籍/.test(live);
+      $("#errAddrLive").style.display = (alInvalid && shouldShowErr("addrLive", submit)) ? "block" : "none";
+      if(alInvalid) ok=false;
+
       return ok;
     }
     case 6: {
       let ok = true;
-      if(!isValidGmailLower($("#gmail").value.trim())){ $("#errGmail").style.display="block"; ok=false; } else $("#errGmail").style.display="none";
-      if(!isValidMobile($("#mobile").value.trim())){ $("#errMobile").style.display="block"; ok=false; } else $("#errMobile").style.display="none";
-      if($("#edu").value.trim()===""){ $("#errEdu").style.display="block"; ok=false; } else $("#errEdu").style.display="none";
+      const gInvalid = !/^[a-z0-9._%+-]+@gmail\.com$/.test($("#gmail").value.trim());
+      $("#errGmail").style.display = (gInvalid && shouldShowErr("gmail", submit)) ? "block" : "none";
+      if(gInvalid) ok=false;
+
+      const mInvalid = !isValidMobile($("#mobile").value.trim());
+      $("#errMobile").style.display = (mInvalid && shouldShowErr("mobile", submit)) ? "block" : "none";
+      if(mInvalid) ok=false;
+
+      const eInvalid = $("#edu").value.trim()==="";
+      $("#errEdu").style.display = (eInvalid && shouldShowErr("edu", submit)) ? "block" : "none";
+      if(eInvalid) ok=false;
+
       return ok;
     }
     case 7: {
       const yes = $('input[name="agreeOther"][value="yes"]').checked;
-      $("#errAgreeOther").style.display = yes ? "none":"block";
+      $("#errAgreeOther").style.display = (!yes && shouldShowErr("agreeOther", submit)) ? "block":"none";
       return yes;
     }
     case 8: {
       let ok = true;
-      if($("#emgName").value.trim()===""){ $("#errEmgName").style.display="block"; ok=false; } else $("#errEmgName").style.display="none";
-      if($("#emgRel").value.trim()===""){ $("#errEmgRel").style.display="block"; ok=false; } else $("#errEmgRel").style.display="none";
-      if($("#homePhone").value.trim()===""){ $("#errHomePhone").style.display="block"; ok=false; } else $("#errHomePhone").style.display="none";
-      if(!isValidMobile($("#emgMobile").value.trim())){ $("#errEmgMobile").style.display="block"; ok=false; } else $("#errEmgMobile").style.display="none";
+      const nInvalid = $("#emgName").value.trim()==="";
+      $("#errEmgName").style.display = (nInvalid && shouldShowErr("emgName", submit)) ? "block" : "none";
+      if(nInvalid) ok=false;
+
+      const rInvalid = $("#emgRel").value.trim()==="";
+      $("#errEmgRel").style.display = (rInvalid && shouldShowErr("emgRel", submit)) ? "block" : "none";
+      if(rInvalid) ok=false;
+
+      const hInvalid = $("#homePhone").value.trim()==="";
+      $("#errHomePhone").style.display = (hInvalid && shouldShowErr("homePhone", submit)) ? "block" : "none";
+      if(hInvalid) ok=false;
+
+      const mInvalid = !isValidMobile($("#emgMobile").value.trim());
+      $("#errEmgMobile").style.display = (mInvalid && shouldShowErr("emgMobile", submit)) ? "block" : "none";
+      if(mInvalid) ok=false;
+
       const addr = $("#emgAddr").value.trim();
-      if(addr==="" || /同戶籍地|同戶籍/.test(addr)){ $("#errEmgAddr").style.display="block"; ok=false; } else $("#errEmgAddr").style.display="none";
+      const aInvalid = (addr==="") || /同戶籍地|同戶籍/.test(addr);
+      $("#errEmgAddr").style.display = (aInvalid && shouldShowErr("emgAddr", submit)) ? "block" : "none";
+      if(aInvalid) ok=false;
+
       return ok;
     }
     case 9: {
       let ok = true;
       const val = $("#depEnable").value;
-      if(!val){ $("#errDepEnable").style.display="block"; ok=false; } else $("#errDepEnable").style.display="none";
+      const enInvalid = !val;
+      $("#errDepEnable").style.display = (enInvalid && shouldShowErr("depEnable", submit)) ? "block" : "none";
       const show = (val==="是");
       $("#depFields").style.display = show ? "block" : "none";
+      if(enInvalid) ok=false;
+
       if(show){
-        if($("#depRel").value.trim()===""){ $("#errDepRel").style.display="block"; ok=false; } else $("#errDepRel").style.display="none";
-        if($("#depName").value.trim()===""){ $("#errDepName").style.display="block"; ok=false; } else $("#errDepName").style.display="none";
-        if(!isTenAlnum($("#depNid").value.trim())){ $("#errDepNid").style.display="block"; ok=false; } else $("#errDepNid").style.display="none";
-        if(!isValidRoc7($("#depBirth7").value.trim())){ $("#errDepBirth7").style.display="block"; ok=false; } else $("#errDepBirth7").style.display="none";
+        const rInvalid = $("#depRel").value.trim()==="";
+        $("#errDepRel").style.display = (rInvalid && shouldShowErr("depRel", submit)) ? "block" : "none";
+        if(rInvalid) ok=false;
+
+        const nInvalid = $("#depName").value.trim()==="";
+        $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
+        if(nInvalid) ok=false;
+
+        const idInvalid = !isTenAlnum($("#depNid").value.trim());
+        $("#errDepNid").style.display = (idInvalid && shouldShowErr("depNid", submit)) ? "block" : "none";
+        if(idInvalid) ok=false;
+
+        const bInvalid = !isValidRoc7($("#depBirth7").value.trim());
+        $("#errDepBirth7").style.display = (bInvalid && shouldShowErr("depBirth7", submit)) ? "block" : "none";
+        if(bInvalid) ok=false;
       } else {
         ["errDepRel","errDepName","errDepNid","errDepBirth7"].forEach(id=> $("#"+id).style.display="none");
       }
@@ -842,15 +968,16 @@ function validatePage(n){
     }
     case 10: {
       const yes = $('input[name="agreeUpload"][value="yes"]').checked;
-      $("#errAgreeUpload").style.display = yes ? "none":"block";
+      $("#errAgreeUpload").style.display = (!yes && shouldShowErr("agreeUpload", submit)) ? "block":"none";
       return yes;
     }
     case 11: {
       let ok = true;
       const f = $("#idFront").files?.length>0, b = $("#idBack").files?.length>0;
-      $("#errFront").style.display = f? "none":"block"; if(!f) ok=false;
-      $("#errBack").style.display  = b? "none":"block"; if(!b) ok=false;
+      $("#errFront").style.display = (!f && shouldShowErr("idFront", submit))? "block":"none"; if(!f) ok=false;
+      $("#errBack").style.display  = (!b && shouldShowErr("idBack", submit)) ? "block":"none"; if(!b) ok=false;
       const all = ["#chk1","#chk2","#chk3","#chk4"].every(sel=> $(sel).checked);
+      /* checkbox 不顯示個別錯誤；若需要可加 */
       if(!all) ok=false;
       return ok;
     }
@@ -865,7 +992,8 @@ function updateNavState(){
   btnPrev.disabled = currentPage<=1;
   btnFinish.style.display = currentPage===TOTAL_STEPS ? "inline-block" : "none";
   btnNext.style.display   = currentPage===TOTAL_STEPS ? "none" : "inline-block";
-  btnNext.disabled = !validatePage(currentPage);
+  /* 注意：此處只計算通過與否，不顯示紅字 */
+  btnNext.disabled = !validatePage(currentPage, /*submit*/ false);
   btnFinish.disabled = currentPage!==TOTAL_STEPS; /* 最後一頁才可按 */
 }
 
@@ -891,49 +1019,68 @@ function clearCurrentPage(){
 /* ====== 事件綁定與初始化 ====== */
 function bindLiveValidation(){
   /* 第1頁 */
-  $$('input[name="agree1"]').forEach(r=> r.addEventListener('change', updateNavState));
+  $$('input[name="agree1"]').forEach(r=> r.addEventListener('change', ()=>{
+    markTouched('agree1'); updateNavState();
+  }));
   /* 第2頁 */
   ["#corp","#team","#workType","#startDate","#wage"].forEach(sel=>{
-    const el=$(sel); el&&["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+    const el=$(sel); if(!el) return;
+    ["input","change"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); updateNavState(); }));
   });
   /* 第3頁 */
-  $$('input[name="agreeInfo"]').forEach(r=> r.addEventListener('change', updateNavState));
+  $$('input[name="agreeInfo"]').forEach(r=> r.addEventListener('change', ()=>{
+    markTouched('agreeInfo'); updateNavState();
+  }));
   /* 第4頁 */
   ["#fullName","#gender","#nid"].forEach(sel=>{
-    const el=$(sel); el&&["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+    const el=$(sel); if(!el) return;
+    ["input","change"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); updateNavState(); }));
   });
   /* 第5頁 */
   ["#birthRoc7","#birthPlace","#addrHouse","#addrLive"].forEach(sel=>{
-    const el=$(sel); el&&["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+    const el=$(sel); if(!el) return;
+    ["input","change"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); updateNavState(); }));
   });
   /* 第6頁 */
   ["#gmail","#mobile","#edu"].forEach(sel=>{
-    const el=$(sel); el&&["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+    const el=$(sel); if(!el) return;
+    ["input","change"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); updateNavState(); }));
   });
   /* 第7頁 */
-  $$('input[name="agreeOther"]').forEach(r=> r.addEventListener('change', updateNavState));
+  $$('input[name="agreeOther"]').forEach(r=> r.addEventListener('change', ()=>{
+    markTouched('agreeOther'); updateNavState();
+  }));
   /* 第8頁 */
   ["#emgName","#emgRel","#homePhone","#emgMobile","#emgAddr"].forEach(sel=>{
-    const el=$(sel); el&&["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+    const el=$(sel); if(!el) return;
+    ["input","change"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); updateNavState(); }));
   });
   /* 第9頁 */
   ["#depEnable","#depRel","#depName","#depNid","#depBirth7"].forEach(sel=>{
-    const el=$(sel); el&&["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+    const el=$(sel); if(!el) return;
+    ["input","change"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); updateNavState(); }));
+  });
+  $("#depEnable")?.addEventListener('change', ()=>{
+    /* 切換顯示區域後重新計算 */
+    updateNavState();
   });
   /* 第10頁 */
-  $$('input[name="agreeUpload"]').forEach(r=> r.addEventListener('change', updateNavState));
+  $$('input[name="agreeUpload"]').forEach(r=> r.addEventListener('change', ()=>{
+    markTouched('agreeUpload'); updateNavState();
+  }));
   /* 第11頁 */
-  ["#idFront","#idBack","#chk1","#chk2","#chk3","#chk4"].forEach(sel=>{
+  ["#idFront","#idBack"].forEach(sel=>{
     const el=$(sel); if(!el) return;
-    if(sel==="#idFront"||sel==="#idBack"){
-      el.addEventListener('change', ()=>{
-        $("#nameFront").textContent = ($("#idFront").files?.[0]?.name)||"尚未選取檔案";
-        $("#nameBack").textContent  = ($("#idBack").files?.[0]?.name)||"尚未選取檔案";
-        updateNavState();
-      });
-    }else{
-      el.addEventListener('change', updateNavState);
-    }
+    el.addEventListener('change', ()=>{
+      markTouched(el.id);
+      $("#nameFront").textContent = ($("#idFront").files?.[0]?.name)||"尚未選取檔案";
+      $("#nameBack").textContent  = ($("#idBack").files?.[0]?.name)||"尚未選取檔案";
+      updateNavState();
+    });
+  });
+  ["#chk1","#chk2","#chk3","#chk4"].forEach(sel=>{
+    const el=$(sel); if(!el) return;
+    el.addEventListener('change', updateNavState);
   });
 }
 
@@ -942,10 +1089,15 @@ function bindActionBar(){
     if(currentPage>1){ showStep(currentPage-1); }
   });
   $("#btnNext").addEventListener("click", ()=>{
-    if(validatePage(currentPage) && currentPage<TOTAL_STEPS){ showStep(currentPage+1); }
+    const ok = validatePage(currentPage, /*submit*/ true);
+    if(ok && currentPage<TOTAL_STEPS){
+      setUpdatedNow(); /* 新增：每次過頁標記更新時間 */
+      showStep(currentPage+1);
+    }
   });
   $("#btnFinish").addEventListener("click", ()=>{
     if(currentPage===TOTAL_STEPS){
+      setUpdatedNow(); /* 新增：完成時也標記更新時間 */
       alert("已完成。感謝您的填寫！");
     }
   });
@@ -957,6 +1109,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
   showStep(1);
   bindLiveValidation();
   bindActionBar();
+  autoFitActionbarHeight(); /* 新增：載入後先量測 actionbar 高度 */
+  updateStampUI();          /* 新增：初始化時間戳顯示 */
+  /* 右上角頁碼初始化已由 showStep 處理 */
+  /* 注意：密碼正確後才會寫入 CreatedAt 時間戳 */
 });
 </script>
 </body>
