@@ -2,8 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <!-- 原：viewport；調整：加入 maximum-scale=1，避免 iOS 密碼欄自動放大 -->
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>勞工名卡建檔表｜Start Work System Test / Labor Card System Test</title>
 
   <style>
@@ -21,15 +20,15 @@
     --btn-border: #2a2a2a;      /* 按鈕邊框（可調） */
 
     --title-size: 20px;         /* 頁面標題字級（可調；每頁可覆蓋） */
-    --content-size: 12px;       /* 內容/表單字級（可調；每頁可覆蓋） */
+    --content-size: 12px;       /* 內文/表單基準字級（可調；每頁可覆蓋） */
     --footer-size: 11px;        /* 頁尾字級（可調） */
 
     /*//* --------全域字級控制變數（可自行調整；新增）--------*/*/
-    --label-size: 13px;                      /* 調整：欄位標題字級 13px（公司名稱等） */
-    --hint-size: 12px;                       /* 小字提示（label small） */
-    --input-size: var(--hint-size);          /* 輸入框/選單中文字級 */
-     --placeholder-size: var(--hint-size);   /* placeholder 字級 */
-    --error-size: 12px;                      /* 錯誤訊息字級 */
+    --label-size: 13px;         /* 欄位標題字級（例如：公司名稱；可調） */
+    --hint-size: 12px;          /* 小字提示（label small；可調） */
+    --input-size: 12px;         /* 輸入框/選單內文字字級（可調） */
+    --placeholder-size: 12px;   /* placeholder 字級（可調） */
+    --error-size: 12px;         /* 錯誤訊息字級（可調） */
 
     --section-gap: 16px;        /* 區塊與段落間距（可調） */
     --control-pad: 10px 12px;   /* 控制項內距（可調） */
@@ -40,7 +39,7 @@
 
     --input-height: 38px;       /* 控制項高度（讓框框同高；可調） */
 
-    --actionbar-h: 64px;        /* 底部固定操作列高度（可調；將由 JS 自動覆蓋實際高度） */
+    --actionbar-h: 64px;        /* 底部固定操作列高度（可調；JS 覆蓋實際高度） */
     --footer-h: 44px;           /* 頁尾高度（可調） */
     --kv-offset: 0px;           /* 鍵盤彈出時向上位移量（JS 寫入） */
 
@@ -65,7 +64,7 @@
 
   /* 可選：如需自帶字型，將 woff2 檔放入 /fonts 並取消下列註解（新增）
   @font-face{
-    font-family: "GenSenRounded";
+    font-family: "GenSenRounded"; /* 源泉圓體（示意） */
     src: url("fonts/GenSenRounded-Normal.woff2") format("woff2");
     font-weight: 400; font-style: normal; font-display: swap;
   }
@@ -231,19 +230,19 @@
     border: 1px solid var(--control-border);
     border-radius: var(--control-radius);
     outline: none;
-    /* 調整：所有框框內文字（含下拉選單）改為與小備註同色 */
+
+    /*//* --------全域：輸入框/選單內文字統一為 ⏍ 同色 + 同字級（12px；新增）--------*/*/
     color: var(--muted);
-    /*//* --------全域：輸入框內文字字級（新增）--------*/*/
-    font-size: var(--input-size, var(--content-size));
+    font-size: var(--input-size);
+
     height: var(--input-height);
     box-sizing: border-box;
   }
-  /*//* --------全域：placeholder 字級（新增）--------*/*/
-  /* 調整：placeholder 顏色同步小備註色 */
+
+  /*//* --------全域：placeholder 字級與顏色鎖定為 ⏍ 同色；新增--------*/*/
   input::placeholder { 
-    font-size: var(--placeholder-size, var(--input-size, var(--content-size))); 
+    font-size: var(--placeholder-size);
     color: var(--muted);
-    opacity: .95;
   }
 
   input:focus, select:focus {
@@ -251,21 +250,27 @@
     box-shadow: 0 0 0 3px rgba(96,165,250,.25);
   }
 
-  /*//* --------全域：錯誤訊息字級（新增）--------*/*/
-  .error { color: var(--danger); margin-top: 6px; font-size: var(--error-size, var(--content-size)); display:none; }
+  /*//* --------全域：錯誤訊息字級與顏色（淡黃）；新增--------*/*/
+  .error { color: var(--danger); margin-top: 6px; font-size: var(--error-size); display:none; }
 
-  /* 讓「只有是/否」的頁面維持與內容相同大小（不受 label 14px 影響） */
+  /* 讓「只有是/否」的頁面維持與內容相同大小（不受 label 13px 影響） */
   .radio-row label { font-size: var(--content-size); font-weight: 700; }
 
-  /* iOS Safari 自動放大防呆（保留對 text/email/password），但「select 保持 12px」；（調整：移除 select；新增註解） */
+  /* iOS Safari 自動放大防呆（先前全域 16px 會讓所有欄位放大 → 改為僅密碼遮罩套用；保留註解） */
+  /*
   @supports (-webkit-touch-callout: none) {
     input[type="text"], 
     input[type="email"], 
     input[type="password"],
-    textarea { font-size: 16px; } /* 可自行調整：避免焦點觸發自動縮放；select 不跟隨 */
+    textarea { font-size: 16px; } 
   }
-  /* 強制 select 仍用 12px（覆蓋 iOS 行為；新增） */
-  /* 調整：同時讓 select 內文字顏色與小備註一致 */
+  */
+  /* iOS Safari 自動放大防呆（僅作用在登入遮罩的密碼欄；避免一開始整頁放大；新增） */
+  @supports (-webkit-touch-callout: none) {
+    .gate #gatePwd { font-size: 16px; }
+  }
+
+  /* 強制 select 仍用 12px 與 ⏍ 同色（覆蓋可能的環境差異；新增） */
   select { font-size: var(--input-size) !important; color: var(--muted) !important; }
 
   /* 檔案上傳（同高） */
@@ -426,8 +431,6 @@
     position: fixed; inset: 0; z-index: 9999;
     background: rgba(0,0,0,0.75);
     display: flex; align-items: center; justify-content: center;
-    /* 新增：在 gate 區域把輸入字級提升，避免 iOS 放大 */
-    --input-size: 16px;
   }
   .gate-card {
     width: min(520px, 92vw);
@@ -443,12 +446,8 @@
   .gate .row label { text-align: center; }            /* 新增：標籤置中 */
   .gate .row input {
     display: block; margin: 0 auto; text-align: center; max-width: 320px; /* 新增：輸入框置中與寬度 */
-    color: var(--muted); 
-    font-size: 16px; /* 再保險：密碼欄維持 ≥16px，避免 iOS 放大 */
-    line-height: 1.4;
   }
-  /* 新增：密碼錯誤提示顏色改為黃色 */
-  .gate .error { color: var(--danger); text-align: center; display:none; }
+  .gate .error { text-align: center; display:none; }
   .gate-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
   </style>
 </head>
@@ -886,7 +885,7 @@ function updateStampUI(){
   err.style.display = "none";
   btn.addEventListener("click", ()=>{
     const v = (pwd.value||"").trim();
-    if(v !== ACCESS_PWD){ err.style.display="block"; return; } /* 調整：錯誤訊息為黃色（見 CSS） */
+    if(v !== ACCESS_PWD){ err.style.display="block"; return; }
     err.style.display="none";
     gate.style.display="none";
     setCreatedNow(); /* 成功進入即紀錄建立時間 */
