@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <!-- 鎖縮放：避免打字後需要自行縮小；搭配 iOS 聚焦字級=16 一起使用 -->
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no" />
-  <title>勞報建檔表｜Start Work System Test / Labor Card System Test</title>
+  <title>📝 勞報建檔表</title>
 
   <style>
   :root {
@@ -13,8 +13,8 @@
     --radius: 16px;             /* 面板圓角（可調） */
     --border: #2a2a2a;          /* 邊框色（可調） */
     --ink: #eaeaea;             /* 主要文字色（可調） */
-    --muted: #dfdfdf;           /* 次要文字色（與 ⏍ 同色） ← 依需求改這一行 */
-    --danger: #facc15;          /* 錯誤色（可調；淡黃色） */
+    --muted: #d5d5d5;           /* 次要文字色（與 ⏍ 同色） ← 依需求改這一行 */
+    --danger: #fff2cc;          /* 錯誤色（可調；黃色） */
     --ok: #22c55e;              /* 成功/通過色（可調） */
     --accent: #60a5fa;          /* 重點色/聚焦邊框（可調） */
     --btn-bg: #bc2d2d;          /* 按鈕底色（可調） */
@@ -293,10 +293,10 @@
   <div class="gate" id="passGate">
     <div class="gate-card">
       <h3>輸入密碼後即可填寫</h3>
-      <p>請向人資承辦索取密碼</p>
+      <p>請向人資承辦索取密碼🔐</p>
       <div class="row">
         <label for="gatePwd">輸入密碼</label>
-        <input id="gatePwd" type="password" placeholder="請輸入密碼" />
+        <input id="gatePwd" type="password" placeholder="請輸入密碼🔑" />
         <div class="error" id="gatePwdErr">❌ 密碼錯誤，請再試一次</div>
       </div>
       <div class="gate-actions">
@@ -319,9 +319,8 @@
         <ol class="note-list">
           <li>請依照每頁表單指示執行填寫.</li>
           <li>上傳之個人身分文件悉依相關法令規範辦理保存.</li>
-          <li>填寫表單若遇到困難請向承辦人提出禮貌詢問.</li>
-          <li>若有問題不確定資訊,請先詢問後再行填寫.</li>
-          <li>b1.0.0-11-13-2025-114</li>
+          <li>填寫表單若遇到困難,請向承辦人提出禮貌詢問.</li>
+          <li>若對表單有疑問不確定資訊,請先詢問後再填寫.</li>
         </ol>
 
         <div class="fieldset center-block">
@@ -373,7 +372,7 @@
         </div>
 
         <div class="row">
-          <label for="wage">© 約定工資 <small>⏍ 千分位須逗號，且逗號為半形且位置須正確</small></label>
+          <label for="wage">© 約定工資 <small>⏍ 千分位須逗號，逗號為半形且位置須正確</small></label>
           <input id="wage" type="text" placeholder="範例 ☛40,000或200" />
           <div class="error" id="errWage">⚠️ 請輸入正確格式</div>
         </div>
@@ -383,9 +382,9 @@
       <section class="step" data-page="3" id="step-3">
         <h2>🪧 個人資訊</h2>
         <ol class="note-list">
-          <li>請依照下列問題指示執行填寫.</li>
-          <li>填寫表單若遇到困難請向承辦人提出禮貌詢問.</li>
-          <li>若有問題不確定資訊,請先詢問後再行填寫.</li>
+          <li>請依照每頁問題指示執行填寫.</li>
+          <li>填寫表單若遇到困難,請向承辦人提出禮貌詢問.</li>
+          <li>若對表單有疑問不確定資訊,請先詢問後再填寫.</li>
         </ol>
         <div class="fieldset center-block">
           <div style="font-weight:800; margin-bottom:8px;">是否同意上述事項</div>
@@ -450,10 +449,10 @@
         </div>
       </section>
 
-      <!-- 第6頁：聯絡與學歷（Gmail 只在提交時才檢查） -->
+      <!-- 第6頁：聯絡與學歷 -->
       <section class="step" data-page="6" id="step-6">
         <div class="row">
-          <label for="gmail">© Gmail <small>⏍ 限定Gmail並全程小寫</small></label>
+          <label for="gmail">© Gmail <small>⏍ 限定Gmail,請填寫常用信箱,寄發薪資單或契約使用</small></label>
           <input id="gmail" type="email" placeholder="請輸入mail" />
           <div class="error" id="errGmail">⚠️ 請輸入有效 Gmail（@gmail.com）</div>
         </div>
@@ -475,9 +474,9 @@
       <section class="step" data-page="7" id="step-7">
         <h2>🚨 其他資訊</h2>
         <ol class="note-list">
-          <li>請依照下列問題指示執行填寫.</li>
-          <li>填寫表單若遇到困難請向承辦人提出禮貌詢問.</li>
-          <li>若有問題不確定資訊,請先詢問後再行填寫.</li>
+          <li>請依照每頁問題指示執行填寫.</li>
+          <li>填寫表單若遇到困難,請向承辦人提出禮貌詢問.</li>
+          <li>若對表單有疑問不確定資訊,請先詢問後再填寫.</li>
         </ol>
         <div class="fieldset center-block">
           <div style="font-weight:800; margin-bottom:8px;">是否同意上述事項</div>
@@ -542,20 +541,20 @@
           </div>
 
           <div class="row">
-            <label for="depName">© 姓名</label>⏍ 若有兩人以上,以逗號分隔之
-            <input id="depName" type="text" placeholder="範例 ☛孫悟空、孫悟飯" />
+            <label for="depName">© 姓名</label>⏍ 若有兩人以上,同上</small></label>
+            <input id="depName" type="text" placeholder="範例 ☛孫悟空,孫悟飯" />
             <div class="error" id="errDepName">⚠️ 此欄不得為空</div>
           </div>
 
           <div class="row">
-            <label for="depNid">© 身分證字號 <small>⏍ 共計10碼</small></label>
-            <input id="depNid" type="text" placeholder="範例 ☛A123456789" />
+            <label for="depNid">© 身分證字號 <small>⏍ 共計10碼,若有兩人以上,同上</small></label>
+            <input id="depNid" type="text" placeholder="範例 ☛A123456789,B223456789" />
             <div class="error" id="errDepNid">⚠️ 填寫或格式錯誤</div>
           </div>
 
           <div class="row">
-            <label for="depBirth7">© 民國出生年月日 <small>⏍ 請以yyyMMdd格式填寫,共7碼</small></label>
-            <input id="depBirth7" type="text" placeholder="範例 ☛1121008或0750819" />
+            <label for="depBirth7">© 民國出生年月日 <small>⏍ 請以yyyMMdd格式填寫,共7碼,若有兩人以上,同上</small></label>
+            <input id="depBirth7" type="text" placeholder="範例 ☛1121008,0750819" />
             <div class="error" id="errDepBirth7">⚠️ 格式須為7碼yyyMMdd</div>
           </div>
         </div>
@@ -565,9 +564,10 @@
       <section class="step" data-page="10" id="step-10">
         <h2>⏫ 上傳檔案</h2>
         <ol class="note-list">
-          <li>請詳閱底下SOP.</li>
           <li>上傳之個人身分文件.</li>
+          <li>有正確及及錯誤範例.</li>
           <li>檔案須符合本公司限定規格.</li>
+          <li>哀鳳手機請用手機內建備忘錄掃描.</li>
         </ol>
 
         <!-- 範例改上下 -->
@@ -592,7 +592,7 @@
         </div>
       </section>
 
-      <!-- 第11頁：上傳身分證正面/反面（縮圖在按鈕旁） -->
+      <!-- 第11頁：上傳身分證正面/反面 -->
       <section class="step" data-page="11" id="step-11">
         <div class="file-row">
           <div>身分證正面</div>
@@ -626,7 +626,7 @@
             <label><input type="checkbox" id="chk4"> 4. 上述都已確認完成動作</label>
           </div>
           <div class="note-list" style="margin-left:0;">
-            📣 若使用<strong>備忘錄</strong>掃描,請先「分享→存到檔案或存為PDF」後,再由「檔案/雲端」挑選上傳
+            📣 不接受PDF檔,如須上傳PDF檔,請先轉成jpg檔後再上傳.
           </div>
         </div>
       </section>
@@ -640,14 +640,14 @@
             <label><input type="checkbox" id="preB"> 以上輸入資料都進行雙重確認.</label>
             <label><input type="checkbox" id="preC"> 本人聲明無偽造之不法情形.</label>
             <label><input type="checkbox" id="preD"> 上傳檔案都符合本公司格式.</label>
-            <label><input type="checkbox" id="preE"> 本表單有提供檢核表，請確實檢查後再勾選.</label>
-            <label><input type="checkbox" id="preF"> 5-1. 若勾選後還填寫錯誤，請自負責任.</label>
-            <label><input type="checkbox" id="preG"> 提交表單後，請完成截圖回報機制.</label>
+            <label><input type="checkbox" id="preE"> 本表單有提供檢核表,請確實檢查後再勾選.</label>
+            <label><input type="checkbox" id="preF"> 5-1. 若勾選後還填寫錯誤,請自負責任.</label>
+            <label><input type="checkbox" id="preG"> 提交表單後,請完成截圖回報機制.</label>
           </div>
         </div>
       </section>
 
-      <!-- 第13頁：完成（標題置中；到此自動鎖定、無上一頁/完成） -->
+      <!-- 第13頁：全數完成 -->
       <section class="step" data-page="13" id="step-13">
         <h2>✅ 全數完成</h2>
         <div style="text-align:center; line-height:1.8;">
@@ -680,7 +680,6 @@
   </div>
 
 <script>
-/* <======== 檔案用途：系統共用常數、簽章工具、小工具、固定頁籤定位 ======== > */
 
 /* --------系統常數（可調）-------- */
 const TOTAL_STEPS = 13;  /* 總頁數（顯示用；更新為 13） */
