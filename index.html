@@ -26,7 +26,7 @@
 
     /*//* --------全域字級控制變數（可自行調整；新增）--------*/*/
     --label-size: 13px;         /* 欄位標題字級（例如：公司名稱；可調） */
-    --hint-size: 12px;          /* 小字提示（label small；可調） */
+    --hint-size: 11px;          /* 小字提示（label small；可調） */
     --input-size: 12px;         /* 輸入框/選單內文字字級（可調） */
     --placeholder-size: 12px;   /* placeholder 字級（可調） */
     --error-size: 12px;         /* 錯誤訊息字級（可調） */
@@ -276,7 +276,7 @@
 .step[data-page="7"] h2,
 .step[data-page="10"] h2,
 .step[data-page="12"] h2 {
-  text-align: right !important;
+  text-align: left !important;
 }
 
   /* 第10頁：範例圖片改上下 */
@@ -324,7 +324,7 @@
     <main class="content" id="content">
       <!-- 第1頁 -->
       <section class="step active" data-page="1" id="step-1">
-        <h2>⏰ 注意事項</h2>
+        <h2>　　　⏰ 注意事項</h2>
         <ol class="note-list">
           <li>請依照每頁表單指示執行填寫.</li>
           <li>上傳之個人身分文件悉依相關法令規範辦理保存.</li>
@@ -345,9 +345,14 @@
       <!-- 第2頁：基本資料① -->
       <section class="step" data-page="2" id="step-2">
         <div class="row">
-          <label for="corp">© 公司名稱 <small>⏍ 填寫公司名稱或完整店名</small></label>
-          <input id="corp" type="text" placeholder="請輸入公司名稱/店名" />
-          <div class="error" id="errCorp">⚠️ 此欄位不得為空</div>
+          <label for="team">© 公司名稱 <small>⏍ 請確認後再行點選</small></label>
+          <select id="team">
+            <option value="" selected disabled>請選擇</option>
+            <option>Drunk Caffee 爛醉咖啡</option>
+            <optionFIZZ.FIZZ.TEIPEI</option>
+            <option>Social Company 有趣人類社交局</option>
+          </select>
+          <div class="error" id="errTeam">⚠️ 尚未選擇公司</div>
         </div>
 
         <div class="row">
