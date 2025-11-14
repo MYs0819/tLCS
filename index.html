@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <!-- 鎖縮放：避免打字後需要自行縮小；搭配 iOS 聚焦字級=16 一起使用 -->
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no" />
-  <title>📝 勞報建檔表</title>
+  <title>📝 勞工名卡建檔表</title>
 
   <style>
   :root {
@@ -270,6 +270,15 @@
   .step[data-page="12"]{ --title-size: 15px; --content-size: 12px; }
   .step[data-page="13"]{ --title-size: 15px; --content-size: 12px; }
 
+  /* 指定頁 h2 置右（1=注意事項、3=個人資訊、7=其他資訊、10=上傳檔案、12=資料送出前-核檢區） */
+.step[data-page="1"] h2,
+.step[data-page="3"] h2,
+.step[data-page="7"] h2,
+.step[data-page="10"] h2,
+.step[data-page="12"] h2 {
+  text-align: right !important;
+}
+
   /* 第10頁：範例圖片改上下 */
   .samples{ display:grid; grid-template-columns:1fr; gap:var(--sample-gap); align-items:start; margin-top:10px; }
   .sample-box{ background:var(--sample-bg); border:1px dashed var(--control-border); border-radius:var(--sample-radius); padding:var(--sample-pad); display:flex; flex-direction:column; align-items:center; }
@@ -296,7 +305,7 @@
       <p>請向人資承辦索取密碼🔐</p>
       <div class="row">
         <label for="gatePwd">輸入密碼</label>
-        <input id="gatePwd" type="password" placeholder="請輸入密碼🔑" />
+        <input id="gatePwd" type="password" placeholder="🔑" />
         <div class="error" id="gatePwdErr">❌ 密碼錯誤，請再試一次</div>
       </div>
       <div class="gate-actions">
@@ -420,6 +429,12 @@
           <input id="nid" type="text" placeholder="範例 ☛A123456789" />
           <div class="error" id="errNid">⚠️ 格式或填寫錯誤</div>
         </div>
+
+        <div class="row">
+          <label for="indigenous">© 原住民身分<small>⏍ 有原住民身分直接填寫哪一族,若無則填寫否</small></label>
+          <input id="indigenous" type="text" placeholder="範例 ☛否或布農族" />
+          <div class="error" id="errIndigenous">⚠️ 此欄位不得為空</div>
+        </div>
       </section>
 
       <!-- 第5頁：個資② -->
@@ -541,7 +556,7 @@
           </div>
 
           <div class="row">
-            <label for="depName">© 姓名</label>⏍ 若有兩人以上,同上</small></label>
+            <label for="depName">© 姓名</label><small>⏍ 若有兩人以上,同上</small></label>
             <input id="depName" type="text" placeholder="範例 ☛孫悟空,孫悟飯" />
             <div class="error" id="errDepName">⚠️ 此欄不得為空</div>
           </div>
@@ -560,12 +575,13 @@
         </div>
       </section>
 
-      <!-- 第10頁：⏫ 上傳檔案 -->
+      <!-- 第10頁：上傳檔案 -->
       <section class="step" data-page="10" id="step-10">
         <h2>⏫ 上傳檔案</h2>
         <ol class="note-list">
           <li>上傳之個人身分文件.</li>
           <li>有正確及及錯誤範例.</li>
+          <li>檔案有需要會印出浮貼,要正式點.</li>
           <li>檔案須符合本公司限定規格.</li>
           <li>哀鳳手機請用手機內建備忘錄掃描.</li>
         </ol>
@@ -579,6 +595,14 @@
           <figure class="sample-box">
             <img class="sample-img" src="assets/身分證範本-背面.png" alt="❗️範例-身分證上傳限定規格-背面">
             <figcaption class="sample-cap">範例-身分證上傳限定規格-背面</figcaption>
+          </figure>
+          <figure class="sample-box">
+            <img class="sample-img" src="assets/錯誤範例-1.jpg" alt="❗️範例-1">
+            <figcaption class="sample-cap">錯誤範例-四角沒貼齊且要歪著頭看?</figcaption>
+          </figure>
+          <figure class="sample-box">
+            <img class="sample-img" src="assets/錯誤範例-2.jpg" alt="❗️範例-2">
+            <figcaption class="sample-cap">錯誤範例-四角沒貼齊且手指入鏡</figcaption>
           </figure>
         </div>
 
@@ -631,7 +655,7 @@
         </div>
       </section>
 
-      <!-- 第12頁：❗️資料送出前-核檢區（7 條勾選；不顯示錯誤） -->
+      <!-- 第12頁：❗️資料送出前-核檢區 -->
       <section class="step" data-page="12" id="step-12">
         <h2>❗️資料送出前-核檢區</h2>
         <div class="fieldset">
@@ -678,12 +702,12 @@
       © Copyright 2025 MYs System-b1.0.0-11-13
     </footer>
   </div>
-
+  
 <script>
 
 /* --------系統常數（可調）-------- */
 const TOTAL_STEPS = 13;  /* 總頁數（顯示用；更新為 13） */
-const ACCESS_PWD = "19860819"; /* 進入密碼（可調） */
+const ACCESS_PWDS =  ["MYs-SC","MYs-DC","MYs-FZ"]; /* 進入密碼（可調） */
 
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -912,6 +936,10 @@ function validatePage(n, submit=false){
       $("#errNid").style.display = (nidInvalid && shouldShowErr("nid", submit)) ? "block" : "none";
       if(nidInvalid) ok=false;
 
+      const indigInvalid = $("#indigenous").value.trim()==="";
+      $("#errIndigenous").style.display = (indigInvalid && shouldShowErr("indigenous", submit)) ? "block" : "none";
+      if(indigInvalid) ok=false;
+
       return ok;
     }
     case 5: {
@@ -990,27 +1018,23 @@ function validatePage(n, submit=false){
       $("#depFields").style.display = show ? "block" : "none";
       if(enInvalid) ok=false;
 
-      if(show){
-        const rInvalid = $("#depRel").value.trim()==="";
-        $("#errDepRel").style.display = (rInvalid && shouldShowErr("depRel", submit)) ? "block" : "none";
-        if(rInvalid) ok=false;
+    if(show){
+      const rInvalid = $("#depRel").value.trim()==="";
+      $("#errDepRel").style.display = (rInvalid && shouldShowErr("depRel", submit)) ? "block" : "none";
+      if(rInvalid) ok=false;
 
-        const nInvalid = $("#depName").value.trim()==="";
-        $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
-        if(nInvalid) ok=false;
+      const nInvalid = $("#depName").value.trim()==="";
+      $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
+    if(nInvalid) ok=false;
 
-        const idInvalid = !isTenAlnum($("#depNid").value.trim());
-        $("#errDepNid").style.display = (idInvalid && shouldShowErr("depNid", submit)) ? "block" : "none";
-        if(idInvalid) ok=false;
-
-        const bInvalid = !isValidRoc7($("#depBirth7").value.trim());
-        $("#errDepBirth7").style.display = (bInvalid && shouldShowErr("depBirth7", submit)) ? "block" : "none";
-        if(bInvalid) ok=false;
-      } else {
-        ["errDepRel","errDepName","errDepNid","errDepBirth7"].forEach(id=> $("#"+id).style.display="none");
-      }
-      return ok;
-    }
+      /* 取消驗證：眷屬身分證字號、民國出生年月日 */
+      $("#errDepNid").style.display = "none";
+      $("#errDepBirth7").style.display = "none";
+  } else {
+      ["errDepRel","errDepName","errDepNid","errDepBirth7"].forEach(id=> $("#"+id).style.display="none");
+  }
+  return ok;
+}
     case 10: {
       const yes = $('input[name="agreeUpload"][value="yes"]').checked;
       $("#errAgreeUpload").style.display = (!yes && shouldShowErr("agreeUpload", submit)) ? "block":"none";
@@ -1090,12 +1114,11 @@ function bindLiveValidation(){
   $$('input[name="agreeInfo"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeInfo'); updateNavState(); }));
 
   /* 第4頁 */
-  ["#fullName","#gender","#nid"].forEach(sel=>{
-    const el=$(sel); if(!el) return;
-    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+  ["#fullName","#gender","#nid","#indigenous"].forEach(sel=>{
+  const el=$(sel); if(!el) return;
+  ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+  ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
   });
-  $("#nid")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errNid").style.display=(v!=="" && !alnumPrefixOK(v,10))?"block":"none"; });
 
   /* 第5頁 */
   ["#birthRoc7","#birthPlace","#addrHouse","#addrLive"].forEach(sel=>{
