@@ -681,7 +681,7 @@
             <label><input type="checkbox" id="preH"> 7. 提交表單後,請完成截圖回報機制.</label>
           </div>
         </div>
-        <div class="right-actions" style="display:flex; gap:10px;">
+        <div class="right-actions" style="display:flex; gap:10px; justify-content: flex-end;">
           <button class="btn btn--nav" id="btnSubmit" type="button">提交</button>
         </div>
       </section>
@@ -783,7 +783,21 @@ function isValidPassword(inputPassword) {
   });
 })();
 
-/* ====== 表單提交前提示訊息 ====== */
+// 監聽第12頁的勾選框，確保所有勾選後才能提交
+document.querySelectorAll('#step-12 .checks input[type="checkbox"]').forEach(checkbox => {
+  checkbox.addEventListener('change', checkCheckboxes);
+});
+
+// 檢查所有勾選框是否已勾選
+function checkCheckboxes() {
+  const allChecked = document.querySelectorAll('#step-12 .checks input[type="checkbox"]:checked').length === 7;
+  const submitBtn = document.getElementById('btnSubmit');
+  
+  // 如果已勾選所有選項，啟用提交按鈕
+  submitBtn.disabled = !allChecked;
+}
+
+// 表單提交前提示訊息
 function checkFormFilled() {
   const gender = document.querySelector("#gender").value;
   if (gender === "男") {
@@ -793,12 +807,9 @@ function checkFormFilled() {
   }
 }
 
-// 表單提交功能（在第12頁提交）
+// 提交表單資料的邏輯
 document.getElementById("btnSubmit").addEventListener("click", () => {
-  // 在這裡您可以調用提交表單數據的Google Apps Script
-  // 例如：saveFormDataToSheet()
-  
-  // 檢查是否已填寫過表單
+  // 在這裡你可以先檢查是否已填寫過表單
   checkFormFilled();
 
   // 收集表單資料
