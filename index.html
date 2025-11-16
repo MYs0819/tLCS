@@ -682,7 +682,7 @@
 
       <!-- 第12頁：❗️資料送出前-核檢區 -->
       <section class="step" data-page="12" id="step-12">
-        <h2>　　 ❗️資料送出前-核檢區</h2>
+        <h2>❗️資料送出前-核檢區</h2>
         <div class="fieldset">
           <div class="checks">
             <label><input type="checkbox" id="preA"> 1. 請仔細思考認真填寫此表單.</label>
@@ -691,13 +691,13 @@
             <label><input type="checkbox" id="preD"> 4. 上傳檔案都符合本公司格式.</label>
             <label><input type="checkbox" id="preE"> 5. 本表單有提供檢核表,請確實檢查後再勾選.</label>
             <label><input type="checkbox" id="preF"> 5-1. 若勾選後還填寫錯誤,請自負責任.</label>
-            <label><input type="checkbox" id="preG"> 6. 提交表單後無法更改資訊,請確認填寫資料正確再提交.</label>
+            <label><input type="checkbox" id="preG"> 6. 提交表單後無法更改,請查核填寫資料正確無誤再提交.</label>
             <label><input type="checkbox" id="preH"> 7. 提交表單後,請完成截圖回報機制.</label>
           </div>
         </div>
-        <div class="right-actions" style="display:flex; gap:10px; justify-content: flex-end;">
-          <button class="btn btn--nav" id="btnSubmit" type="button">提交</button>
-        </div>
+        <div class="right-actions" style="display:flex; gap:10px; justify-content:center; position:relative; bottom:0;">
+        <button class="btn btn--nav" id="btnSubmit" type="button" disabled>提交</button>
+      </div>
       </section>
 
       <!-- 第13頁：全數完成 -->
@@ -797,20 +797,22 @@ function isValidPassword(inputPassword) {
   });
 })();
 
-// 監聽第12頁的勾選框，確保所有勾選後才能提交
+// 第12頁全部打勾後才可提交
 document.querySelectorAll('#step-12 .checks input[type="checkbox"]').forEach(checkbox => {
   checkbox.addEventListener('change', checkCheckboxes);
 });
 
-// 檢查所有勾選框是否已勾選
+// 檢查是否已全部打勾
 function checkCheckboxes() {
   const allChecked = document.querySelectorAll('#step-12 .checks input[type="checkbox"]:checked').length === 7;
   const submitBtn = document.getElementById('btnSubmit');
   const nextBtn = document.getElementById('btnNext');
   
-  // 如果已勾選所有選項，啟用提交按鈕
+  // 只有勾選所有7項才能啟用提交按鈕
   submitBtn.disabled = !allChecked;
-  nextBtn.disabled = !allChecked; // 下一頁也要禁用
+  
+  // 當全部勾選並且提交後，才能點下一頁
+  nextBtn.disabled = !allChecked || submitBtn.disabled;
 }
 
 // 表單提交前提示訊息
@@ -823,12 +825,27 @@ function checkFormFilled() {
   }
 }
 
-// 提交表單資料的邏輯
-document.getElementById("btnSubmit").addEventListener("click", () => {
-  // 在這裡你可以先檢查是否已填寫過表單
-  checkFormFilled();
+// 提交按鈕觸發
+document.getElementById("btnSubmit").addEventListener("click", function () {
+  // 確保所有欄位已填寫
+  const formData = gatherFormData();
+  if (!validateFormData(formData)) {
+    alert("請確認所有欄位已填寫！");
+    return;
+  }
+  
+  // 提交資料到後端
+  submitFormData(formData);
+  
+  // 提交後使下一頁按鈕可用
+  document.getElementById("btnNext").disabled = false;
+  
+  // 提交後禁用提交按鈕，防止重複提交
+  this.disabled = true;
+});
 
-  // 收集表單資料
+// 收集表單資料
+function gatherFormData() {
   const formData = {
     email: document.getElementById('email').value,
     company: document.getElementById('company').value,
@@ -859,12 +876,13 @@ document.getElementById("btnSubmit").addEventListener("click", () => {
     idFront: document.getElementById('idFront').files[0],  // 檔案
     idBack: document.getElementById('idBack').files[0],    // 檔案
   };
+  return formData;
+}
 
-  // 提交表單資料
-  submitFormData(formData);
-  // 提交後，禁用下一頁按鈕，防止多次提交
-  document.getElementById('btnNext').disabled = false;
-});
+// 驗證表單資料是否完整
+function validateFormData(formData) {
+  return Object.values(formData).every(value => value !== "" && value !== undefined);
+}
 
 // 提交表單資料到後端
 function submitFormData(formData) {
