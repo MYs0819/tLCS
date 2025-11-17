@@ -797,7 +797,7 @@ function isValidPassword(inputPassword) {
   });
 })();
 
-// 監聽第12頁的所有勾選框，只有8項全部勾選才可提交
+/* ====== 第12頁邏輯調整：提交按鈕 & 下一頁按鈕 ====== */
 document.querySelectorAll('#step-12 .checks input[type="checkbox"]').forEach(checkbox => {
   checkbox.addEventListener('change', checkCheckboxes);
 });
@@ -807,10 +807,10 @@ function checkCheckboxes() {
   const allChecked = document.querySelectorAll('#step-12 .checks input[type="checkbox"]:checked').length === 8;
   const submitBtn = document.getElementById('btnSubmit');
   const nextBtn = document.getElementById('btnNext');
-  
+
   // 只有勾選所有8項才能啟用提交按鈕
   submitBtn.disabled = !allChecked;
-  
+
   // 當全部勾選並且提交後，才能點下一頁
   nextBtn.disabled = !allChecked || submitBtn.disabled;
 }
