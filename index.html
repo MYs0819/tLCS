@@ -797,18 +797,18 @@ function isValidPassword(inputPassword) {
   });
 })();
 
-// 監聽第12頁的所有勾選框，只有七項全部勾選才可提交
+// 監聽第12頁的所有勾選框，只有8項全部勾選才可提交
 document.querySelectorAll('#step-12 .checks input[type="checkbox"]').forEach(checkbox => {
   checkbox.addEventListener('change', checkCheckboxes);
 });
 
-// 檢查是否已全部打勾（7項）
+// 檢查是否已全部打勾（8項）
 function checkCheckboxes() {
   const allChecked = document.querySelectorAll('#step-12 .checks input[type="checkbox"]:checked').length === 8;
   const submitBtn = document.getElementById('btnSubmit');
   const nextBtn = document.getElementById('btnNext');
   
-  // 只有勾選所有7項才能啟用提交按鈕
+  // 只有勾選所有8項才能啟用提交按鈕
   submitBtn.disabled = !allChecked;
   
   // 當全部勾選並且提交後，才能點下一頁
@@ -819,9 +819,9 @@ function checkCheckboxes() {
 function checkFormFilled() {
   const gender = document.querySelector("#gender").value;
   if (gender === "男") {
-    alert("✋你已填寫過囉");
+    alert("✋ 你已填寫過囉");
   } else if (gender === "女") {
-    alert("✋妳已填寫過囉");
+    alert("✋ 妳已填寫過囉");
   }
 }
 
@@ -894,15 +894,15 @@ function submitFormData(formData) {
   .then(response => response.json())
   .then(data => {
     if (data.status === 'success') {
-      alert("表單已成功提交！");
+      alert("✅ 表單已成功提交");
       window.location.reload();  // 可選：提交成功後刷新頁面
     } else {
-      alert(data.message || "提交失敗，請重試！");
+      alert(data.message || "❌ 提交失敗,請重試");
     }
   })
   .catch(error => {
     console.error("Error:", error);
-    alert("提交失敗，請稍後再試！");
+    alert("❌ 提交失敗,請稍後再試");
   });
 }
 
