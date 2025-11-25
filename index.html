@@ -7,47 +7,51 @@
   <title>📝 勞工名卡建檔表</title>
 
   <style>
-  :root {
-    /* --------系統共用常數（可全站調整）-------- */
-    --card-w: 980px;            /* 表單面板最大寬度（可調） */
-    --radius: 16px;             /* 面板圓角（可調） */
-    --border: #2a2a2a;          /* 邊框色（可調） */
-    --ink: #eaeaea;             /* 主要文字色（可調） */
-    --muted: #bcbcbc;           /* 次要文字色（與 ⏍ 同色） ← 依需求改這一行 */
-    --danger: #fff2cc;          /* 錯誤色（可調；黃色） */
-    --ok: #22c55e;              /* 成功/通過色（可調） */
-    --accent: #60a5fa;          /* 重點色/聚焦邊框（可調） */
-    --btn-bg: #bc2d2d;          /* 按鈕底色（可調） */
-    --btn-border: #2a2a2a;      /* 按鈕邊框（可調） */
+      :root {
+           /* -----------GAS部署網址再892行------------ */
+           /* --------系統共用常數（可全站調整）-------- */
+          --card-w: 980px;       /* 表單面板最大寬度（可調） */
+          --radius: 16px;        /* 面板圓角（可調） */
+          --border: #2a2a2a;     /* 邊框色（可調） */
+          --ink: #eaeaea;        /* 主要文字色（可調） */
+          --muted: #bcbcbc;      /* 次要文字色（與 ⏍ 同色） ← 依需求改這一行 */
+          --danger: #fff2cc;     /* 錯誤色（可調；黃色） */
+          --ok: #22c55e;         /* 成功/通過色（可調） */
+          --accent: #60a5fa;     /* 重點色/聚焦邊框（可調） */
+          --btn-bg: #bc2d2d;     /* 按鈕底色（可調） */
+          --btn-border: #2a2a2a; /* 按鈕邊框（可調） */
 
-    --title-size: 20px;         /* 頁面標題字級（可調；每頁可覆蓋） */
-    --content-size: 12px;       /* 內文/表單基準字級（可調；每頁可覆蓋） */
-    --footer-size: 11px;        /* 頁尾字級（可調） */
+          --title-size: 24px;    /* 上方頁面主標題字級（可調） */
+          --content-size: 12px;  /* 密碼之確定、頁數、上下一頁（可調） */
+          --footer-size: 12px;   /* 商標；版權（可調） */
 
-    /*//* --------全域字級控制變數（可自行調整；新增）--------*/*/
-    --label-size: 13px;         /* 欄位標題字級（例如：公司名稱；可調） */
-    --hint-size: 10px;          /* 小字提示（label small；可調） */
-    --input-size: 12px;         /* 輸入框/選單內文字字級（可調） */
-    --placeholder-size: 12px;   /* placeholder 字級（可調） */
-    --error-size: 12px;         /* 錯誤訊息字級（可調） */
+           /* --------全域字級控制變數（可自行調整）--------*/
+          --label-size: 15px;        /* 欄位標題字級（例如：公司名稱；可調） */
+          --hint-size: 11px;         /* 小字提示（label small；可調） */
+          --input-size: 14px;        /* 輸入框/選單內文字字級（可調） */
+          --placeholder-size: 14px;  /* placeholder 字級（可調） */
+          --error-size: 14px;        /* 錯誤訊息字級（可調） */
 
-    --section-gap: 16px;        /* 區塊與段落間距（可調） */
-    --control-pad: 10px 12px;   /* 控制項內距（可調） */
-    --control-radius: 12px;     /* 控制項圓角（可調） */
-    --control-bg: #0f0f0f;      /* 控制項背景（可調） */
-    --control-border: #262626;  /* 控制項邊框（可調） */
-    --control-focus: #60a5fa;   /* 控制項聚焦外框色（可調） */
+          --section-gap: 16px;       /* 區塊與段落間距（可調） */
+          --control-pad: 10px 12px;  /* 控制項內距（可調） */
+          --control-radius: 12px;    /* 控制項圓角（可調） */
+          --control-bg: #0f0f0f;     /* 控制項背景（可調） */
+          --control-border: #262626; /* 控制項邊框（可調） */
+          --control-focus: #60a5fa;  /* 控制項聚焦外框色（可調） */
 
-    --input-height: 38px;       /* 控制項高度（讓框框同高；可調） */
+          --input-height: 38px;      /* 控制項高度（讓框框同高；可調） */
 
-    --actionbar-h: 64px;        /* 底部固定操作列高度（可調；JS 覆蓋實際高度） */
-    --footer-h: 44px;           /* 頁尾字級（可調） */
-    --kv-offset: 0px;           /* 鍵盤彈出時向上位移量（JS 寫入） */
+          --actionbar-h: 64px;       /* 底部固定操作列高度（可調；JS 覆蓋實際高度） */
+          --footer-h: 44px;          /* 頁尾高度（可調） */
+          --kv-offset: 0px;          /* 鍵盤彈出時向上位移量（JS 寫入） */
 
-    /* --------選單字體大小調整（所有選單）-------- */
-    select {
-    font-size: 8px !important;  /* 調小所有選單的字體 */
-    }
+          /* -----------字級統整模組 同意；有異議----------- */
+          --fz-title: 28px;          /* ★ 大標題（步驟名稱、頁面大標） */
+          --fz-subtitle: 22px;       /* ★ 第二層標題（區塊名稱、子標題） */
+          --fz-section: 20px;        /* ★ 區段說明（多用於段落標語、章節開場） */
+          --fz-body: 18px;           /* ★ 內文正文（整份表單最常用的字） */
+          --fz-note: 16px;           /* ★ 備註、小提示、條文（例如：了解 有異議） */
+          --fz-xs: 14px;             /* ★ 特小字（很少用，通常是補充或版權） */
     
     /* 上一頁/下一頁縮小用（可調） */
     --nav-btn-min-h: 32px;      /* 只影響「上一頁 / 下一頁」兩顆按鈕的最小高度（可調） */
@@ -59,6 +63,7 @@
 
     /* 面板背景變數（由 data-* 控制） */
     --panel-bg: linear-gradient(0deg,rgba(43,37,37,1) 0%, rgba(0,0,0,1) 100%); /* 預設黑 */
+        
     /*//* --------第10頁：範例圖片尺寸/外觀（可自行調整；新增）--------*/*/
     --sample-gap: 10px;         /* 圖片之間的間距（可調） */
     --sample-max-h: 180px;      /* 圖片最大高度（可調） */
@@ -66,6 +71,36 @@
     --sample-bg: rgba(255,255,255,0.04); /* 圖片外框底色（可調） */
     --sample-radius: 12px;      /* 圖片外框圓角（可調） */
   }
+
+    /* --------選單字體大小調整（所有選單）-------- */
+    select {
+        font-size: 14px !important; /* 調小所有選單的字體 */
+    }
+
+    /* ----------統一字級------------ */
+    .fz-title {
+         font-size: var(--fz-title);
+     }
+
+     .fz-subtitle {
+         font-size: var(--fz-subtitle);
+    }
+
+    .fz-section {
+        font-size: var(--fz-section);
+     }
+
+     .fz-body {
+         font-size: var(--fz-body);
+     }
+
+     .fz-note {
+         font-size: var(--fz-note);
+    }
+
+     .fz-xs {
+            font-size: var(--fz-xs);
+     }
 
   /* ===== 全站背景底色 ===== */
   html, body { height: 100%; margin: 0; overflow-x: hidden; }
@@ -312,7 +347,7 @@
         <label for="gatePwd">輸入金鑰🔑</label>
         <input id="gatePwd" type="password" placeholder="請輸入密碼" />
         <button type="button" id="togglePwdVisibility">顯示密碼</button>
-        <div class="error" id="gatePwdErr">❌ 密碼錯誤，請再試一次</div>
+        <div class="error" id="gatePwdErr">❌ 密碼錯誤,請再試一次</div>
       </div>
       <div class="gate-actions">
         <button class="btn" id="gatePwdStart" type="button">確定</button>
@@ -322,7 +357,6 @@
 
   <div class="container" role="region" aria-label="勞工名卡建檔表 分步表單" data-scheme="black">
     <header class="header">
-      <!-- 標題：依你要求「勞工名卡建檔表」、粗體＋陰影 -->
       <div class="header-title">📝 勞工名卡建檔表</div>
       <div class="header-step" id="headerStep">第01頁/共13頁</div>
     </header>
@@ -339,12 +373,12 @@
         </ol>
 
         <div class="fieldset center-block">
-          <div style="font-weight:800;">是否同意上述事項</div>
-          <div class="radio-row" role="radiogroup" aria-label="是否同意上述事項">
-            <label><input type="radio" name="agree1" value="yes"> 是</label>
-            <label><input type="radio" name="agree1" value="no"> 否</label>
+          <div class="fz-note" style="font-weight:800; text-align:center">是否同意上述事項</div>
+          <div class="radio-row fz-note" role="radiogroup" aria-label="是否同意上述事項">
+            <label class="fz-note"><input type="radio" name="agree1" value="yes"> 是</label>
+            <label class="fz-note"><input type="radio" name="agree1" value="no"> 否</label>
           </div>
-          <div class="exit" id="exitMsg">👋 尚未開始,就要結束,再會了...</div>
+          <div class="exit fz-xs" id="exitMsg">👋 尚未開始,就要結束,再會了...</div>
         </div>
       </section>
 
@@ -407,12 +441,12 @@
           <li>若對表單有疑問不確定資訊,請先詢問後再填寫.</li>
         </ol>
         <div class="fieldset center-block">
-          <div style="font-weight:800; margin-bottom:8px;">是否同意上述事項</div>
-          <div class="radio-row" role="radiogroup">
-            <label><input type="radio" name="agreeInfo" value="yes"> 是</label>
-            <label><input type="radio" name="agreeInfo" value="no"> 否</label>
+          <div class="fz-note" style="font-weight:800; text-align:center">>是否同意上述事項</div>
+          <div class="radio-row fz-note" role="radiogroup">
+            <label class="fz-note"<input type="radio" name="agreeInfo" value="yes"> 是</label>
+            <label class="fz-note"<input type="radio" name="agreeInfo" value="no"> 否</label>
           </div>
-          <div class="error" id="errAgreeInfo">⚠️ 需同意才可繼續填寫</div>
+          <div class="error fz-xs" id="errAgreeInfo">⚠️ 需同意才可繼續填寫</div>
         </div>
       </section>
 
@@ -505,12 +539,12 @@
           <li>若對表單有疑問不確定資訊,請先詢問後再填寫.</li>
         </ol>
         <div class="fieldset center-block">
-          <div style="font-weight:800; margin-bottom:8px;">是否同意上述事項</div>
-          <div class="radio-row" role="radiogroup">
-            <label><input type="radio" name="agreeOther" value="yes"> 是</label>
-            <label><input type="radio" name="agreeOther" value="no"> 否</label>
+          <div style="font-weight:800; margin-bottom:8px;;text-align:center">是否同意上述事項</div>
+          <div class="radio-row fz-note" role="radiogroup">
+            <label class="fz-note"><input type="radio" name="agreeOther" value="yes"> 是</label>
+            <label class="fz-note"><input type="radio" name="agreeOther" value="no"> 否</label>
           </div>
-          <div class="error" id="errAgreeOther">⚠️ 需同意才可繼續填寫</div>
+          <div class="error fz-xs" id="errAgreeOther">⚠️ 需同意才可繼續填寫</div>
         </div>
       </section>
 
@@ -618,12 +652,12 @@
         </div>
 
         <div class="fieldset" style="margin-top:16px;">
-          <div style="font-weight:800; margin-bottom:8px; text-align:center;">是否同意上述事項</div>
+          <div styles="fz-note" style="font-weight:800; text-align:center;">是否同意上述事項</div>
           <div class="radio-row" role="radiogroup">
-            <label><input type="radio" name="agreeUpload" value="yes"> 是</label>
-            <label><input type="radio" name="agreeUpload" value="no"> 否</label>
+            <label class="fz-note"><input type="radio" name="agreeUpload" value="yes"> 是</label>
+            <label class="fz-note"><input type="radio" name="agreeUpload" value="no"> 否</label>
           </div>
-          <div class="error" id="errAgreeUpload" style="text-align:center;">⚠️ 需同意才能繼續填寫</div>
+          <div class="error fz-xs"" id="errAgreeUpload" style="text-align:center;">⚠️ 需同意才能繼續填寫</div>
         </div>
       </section>
 
@@ -661,14 +695,14 @@
             <label><input type="checkbox" id="chk4"> 4. 上述都已確認完成動作</label>
           </div>
           <div class="note-list" style="margin-left:0;">
-            📣 不接受PDF檔,如須上傳PDF檔,請先轉成JPG檔後再上傳.
+            📣 如須上傳PDF檔,請先轉成JPG檔後再上傳.
           </div>
         </div>
       </section>
 
       <!-- 第12頁：❗️資料送出前-核檢區 -->
       <section class="step" data-page="12" id="step-12">
-        <h2>　　 ❗️資料送出前-核檢區</h2>
+        <h2>❗️資料送出前-核檢區</h2>
         <div class="fieldset">
           <div class="checks">
             <label><input type="checkbox" id="preA"> 1. 請仔細思考認真填寫此表單.</label>
@@ -694,7 +728,7 @@
           <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
           <div>❗️請截圖此畫面給承辦人</div>
           <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
-          <div>系統已收到資料,將進入處理排程,表單已填寫完畢.</div>
+          <div>系統已收到資料,將進入處理排程.</div>
           <div style="margin-top:10px;color:var(--muted);font-size:11px;">
             建立時間：<span id="stampCreated">—</span>　提交時間：<span id="stampUpdated">—</span>
           </div>
@@ -715,19 +749,20 @@
 
     <footer class="footer" id="footer">
   <img src="assets/MYs_logo_去背1.png" alt="MYs Logo" style="height: 20px; margin-right: 8px; vertical-align: middle;" />
-  © Copyright 2025 MYs System-b1.0.0-11-13
+  ︳© Copyright 2025 MYs System-b1.0.0-11-13~11-26
 </footer>
 </div>
 
 <script>
-
-/* --------系統常數（可調）-------- */
-const TOTAL_STEPS = 13;  /* 總頁數（顯示用；更新為 13） */
+/* --------系統常數-------- */
+const TOTAL_STEPS = 13;
+/* ★★★ 請將此處換成您最新的 GAS 部署網址 ★★★ */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwptYsUxW572V-UjYzA-qDCVVbyWhIm-HRx-QNgKvMO2v2Y_tEtntXzKNWDHG_NM9Sk/exec";
 
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-/* 表單時間戳（建立/更新） */
+/* 表單時間戳 */
 const FORM_META = { createdAt: null, updatedAt: null };
 function fmtTW(d){
   try{
@@ -742,37 +777,25 @@ function updateStampUI(){
   if(u){ u.textContent = FORM_META.updatedAt ? fmtTW(FORM_META.updatedAt) : "—"; }
 }
 
-/* ====== 密碼進入遮罩-動態多組密碼 ====== */
-/* 密碼進入遮罩 - 動態多組密碼 */
-const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"]; // 密碼組，可隨時修改或新增
-
-const ACCESS_PWD = PASSWORDS[0]; // 設定為當前使用的密碼（默認是第一組）
-
+/* ====== 密碼進入遮罩 ====== */
+const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"];
 (function passGateInit(){
   const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
   const togglePwdButton = $("#togglePwdVisibility");
-  
   if (!gate) return;
-  
-  // 初始密碼顯示狀態為隱藏
-  let isPasswordVisible = false;
 
-  // 密碼顯示切換功能
+  let isPasswordVisible = false;
   togglePwdButton.addEventListener("click", () => {
     isPasswordVisible = !isPasswordVisible;
-    pwd.type = isPasswordVisible ? "text" : "password"; // 根據狀態顯示或隱藏密碼
-    togglePwdButton.textContent = isPasswordVisible ? "隱藏密碼" : "顯示密碼"; // 按鈕文字切換
+    pwd.type = isPasswordVisible ? "text" : "password";
+    togglePwdButton.textContent = isPasswordVisible ? "隱藏密碼" : "顯示密碼";
   });
 
   err.style.display = "none";
-  
   btn.addEventListener("click", () => {
-    const v = (pwd.value || "").trim().toLowerCase(); // 將輸入密碼轉為小寫
-    const isValid = PASSWORDS.some(pwd => pwd.toLowerCase() === v); // 比較時將所有密碼轉為小寫
-    if (!isValid) {  // 如果輸入的密碼不在密碼組內
-      err.style.display = "block";
-      return;
-    }
+    const v = (pwd.value || "").trim().toLowerCase();
+    const isValid = PASSWORDS.some(p => p.toLowerCase() === v);
+    if (!isValid) { err.style.display = "block"; return; }
     err.style.display = "none";
     gate.style.display = "none";
     setCreatedNow();
@@ -780,99 +803,114 @@ const ACCESS_PWD = PASSWORDS[0]; // 設定為當前使用的密碼（默認是�
   });
 })();
 
-/* ====== 第12頁邏輯調整：提交按鈕 & 下一頁按鈕 ====== */
-document.querySelectorAll('#step-12 .checks input[type="checkbox"]').forEach(checkbox => {
-  checkbox.addEventListener('change', checkCheckboxes);
-});
-
-// 檢查是否已全部打勾（8項）
-function checkCheckboxes() {
-  const allChecked = document.querySelectorAll('#step-12 .checks input[type="checkbox"]:checked').length === 8;
-  const submitBtn = document.getElementById('btnSubmit');
-  const nextBtn = document.getElementById('btnNext');
-
-  // 只有勾選所有8項才能啟用提交按鈕
-  submitBtn.disabled = !allChecked;
-
-  // 當全部勾選並且提交後，才能點下一頁
-  nextBtn.disabled = !allChecked || submitBtn.disabled;
+/* ====== 檔案轉 Base64 工具 (提交用) ====== */
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        if(!file) { resolve(null); return; }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const base64 = reader.result.split(',')[1];
+            resolve({ name: file.name, mimeType: file.type, base64: base64 });
+        };
+        reader.onerror = error => reject(error);
+    });
 }
 
-// 表單提交前提示訊息
-function checkFormFilled() {
-  const gender = document.querySelector("#gender").value;
-  if (gender === "男") {
-    alert("✋ 你已填寫過囉");
-  } else if (gender === "女") {
-    alert("✋ 妳已填寫過囉");
-  }
-}
+/* ====== 提交資料邏輯 (取代原本的 alert) ====== */
+async function submitData() {
+    const btn = $("#btnSubmit");
+    if (!btn) return;
 
-// 當提交表單時
-document.getElementById('btnSubmit').addEventListener('click', function(e) {
-    e.preventDefault(); // 防止表單默認提交
+    /* 1. 鎖定按鈕，顯示轉圈圈 */
+    const originalText = btn.textContent;
+    btn.textContent = "⏳ 資料傳送中...";
+    btn.disabled = true;
 
-    // 收集所有表單資料
-    const formData = {
-        email: document.getElementById('gmail').value,  // 假設你有一個輸入框用來獲取 email
-        agree1: document.querySelector('input[name="agree1"]:checked').value,
-        company: document.getElementById('company').value,
-        team: document.getElementById('team').value,
-        workType: document.getElementById('workType').value,
-        startDate: document.getElementById('startDate').value,
-        wage: document.getElementById('wage').value,
-        fullName: document.getElementById('fullName').value,
-        gender: document.getElementById('gender').value,
-        nid: document.getElementById('nid').value,
-        birthRoc7: document.getElementById('birthRoc7').value,
-        mobile: document.getElementById('mobile').value,
-        birthPlace: document.getElementById('birthPlace').value,
-        addrHouse: document.getElementById('addrHouse').value,
-        addrLive: document.getElementById('addrLive').value,
-        indigenous: document.getElementById('indigenous').value,
-        gmail: document.getElementById('gmail').value,
-        edu: document.getElementById('edu').value,
-        depEnable: document.getElementById('depEnable').value,
-        depRel: document.getElementById('depRel').value,
-        depName: document.getElementById('depName').value,
-        depNid: document.getElementById('depNid').value,
-        emgName: document.getElementById('emgName').value,
-        emgRel: document.getElementById('emgRel').value,
-        homePhone: document.getElementById('homePhone').value,
-        emgMobile: document.getElementById('emgMobile').value,
-        emgAddr: document.getElementById('emgAddr').value,
-        idFront: document.getElementById('idFront').files[0] ? document.getElementById('idFront').files[0].name : '',
-        idBack: document.getElementById('idBack').files[0] ? document.getElementById('idBack').files[0].name : '',
-        chk1: document.getElementById('chk1').checked,
-        chk2: document.getElementById('chk2').checked,
-        chk3: document.getElementById('chk3').checked,
-        chk4: document.getElementById('chk4').checked,
-        preA: document.getElementById('preA').checked,
-        preB: document.getElementById('preB').checked,
-        preC: document.getElementById('preC').checked,
-        preD: document.getElementById('preD').checked,
-        preE: document.getElementById('preE').checked,
-        preF: document.getElementById('preF').checked,
-        preG: document.getElementById('preG').checked,
-        preH: document.getElementById('preH').checked
+    /* 2. 收集資料 */
+    const payload = {
+        formType: "nameCard", /* 關鍵：通知 GAS 這是勞工名卡 */
+        createdAt: FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : '',
+        
+        company:    $("#company").value,
+        team:       $("#team").value,
+        workType:   $("#workType").value,
+        startDate:  $("#startDate").value,
+        wage:       $("#wage").value,
+        
+        fullName:   $("#fullName").value,
+        gender:     $("#gender").value,
+        nid:        $("#nid").value,
+        indigenous: $("#indigenous").value,
+        
+        birthRoc7:  $("#birthRoc7").value,
+        birthPlace: $("#birthPlace").value,
+        addrHouse:  $("#addrHouse").value,
+        addrLive:   $("#addrLive").value,
+        
+        gmail:      $("#gmail").value,
+        mobile:     $("#mobile").value,
+        edu:        $("#edu").value,
+        
+        /* 眷屬 */
+        depEnable:  $("#depEnable").value,
+        depRel:     $("#depRel").value,
+        depName:    $("#depName").value,
+        depNid:     $("#depNid").value,
+        /* depBirth7 用戶要求欄位列表中無此項，但若有填仍可傳送，GAS端若無對應欄位會忽略 */
+        depBirth7:  $("#depBirth7")?.value || "", 
+
+        /* 緊急聯絡 */
+        emgName:    $("#emgName").value,
+        emgRel:     $("#emgRel").value,
+        homePhone:  $("#homePhone").value,
+        emgMobile:  $("#emgMobile").value,
+        emgAddr:    $("#emgAddr").value,
+        
+        fileFront: null, 
+        fileBack: null
     };
 
-    // 發送資料給後端
-    fetch('https://script.google.com/macros/s/AKfycbzXg7aWhpxPzw9e1TrdAcaNnz_ah_PU1cdwW0nQ322zjYr02w-jOipapZd7PuLQut10/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('提交表單時發生錯誤');
-    });
+    try {
+        /* 3. 處理檔案轉檔 */
+        const f1 = $("#idFront").files[0];
+        const f2 = $("#idBack").files[0];
+
+        if (f1) payload.fileFront = await fileToBase64(f1);
+        if (f2) payload.fileBack  = await fileToBase64(f2);
+
+        /* 4. 發送 */
+        const response = await fetch(GAS_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
+        const res = await response.json();
+
+        /* 5. 處理結果 */
+        if (res.status === 'ok') {
+            /* 成功：跳轉到完成頁 (第13頁) */
+            showStep(13);
+        } else {
+            /* 失敗：顯示錯誤 (例如重複填寫) */
+            alert("❌ " + (res.status === 'duplicate' ? "你/妳已經填寫過..." : "錯誤: " + res.message));
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    } catch (err) {
+        alert("⚠️ 傳送失敗，請聯繫人資承辦...");
+        console.error(err);
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+/* 綁定提交按鈕 (第12頁) */
+document.getElementById('btnSubmit')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    submitData();
 });
 
-/* ====== 鍵盤與縮放控制（iOS） ====== */
+/* ====== 鍵盤與縮放控制 ====== */
 (function keyboardLift(){
   const vv = window.visualViewport;
   if(!vv) return;
@@ -889,7 +927,7 @@ document.getElementById('btnSubmit').addEventListener('click', function(e) {
   apply();
 })();
 
-/* 焦點自動可視（避免被鍵盤或操作列擋住） */
+/* 焦點自動可視 */
 (function focusAutoScroll(){
   document.addEventListener('focusin', (e)=>{
     const el = e.target;
@@ -922,7 +960,7 @@ function isValidRoc7(str){
   return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
 }
 
-/* 前綴即時檢查 */
+/* 前綴檢查 */
 function mobilePrefixOK(v){
   const len = v.length;
   for(let i=0;i<len;i++){
@@ -954,20 +992,17 @@ function wagePrefixOK(v){
   }
   return true;
 }
-function alnumPrefixOK(v, max){ return v.length<=max && /^[A-Za-z0-9]*$/.test(v); }
 function digitsPrefixOK(v, max){ return v.length<=max && /^\d*$/.test(v); }
 
-/* 觸碰狀態（touched）與延後顯示錯誤邏輯 */
+/* 觸碰狀態 */
 const TOUCHED = Object.create(null);
 function markTouched(id){ if(id) TOUCHED[id] = true; }
 function shouldShowErr(id, submit){ return !!submit || !!TOUCHED[id]; }
 
-/* ====== 步驟顯示與背景配色 ====== */
+/* ====== 步驟顯示 ====== */
 let currentPage = 1;
-let IS_LOCKED = false; /* 完成或最後頁進入後鎖定 */
+let IS_LOCKED = false;
 function pad2(n){ return String(n).padStart(2,'0'); }
-
-/* 指定頁為紫色：1,3,7,10,12；其餘黑色 */
 function pageIsPurple(n){ return [1,3,7,10,12].includes(n); }
 
 function updateHeaderStep(){
@@ -978,11 +1013,7 @@ function updateHeaderStep(){
 
 function lockAllAndHideNav(){
   IS_LOCKED = true;
-  // 停用所有可互動元素
-  document.querySelectorAll('input, select, button, textarea').forEach(el=>{
-    el.disabled = true;
-  });
-  // 導航按鈕隱藏（最後一頁不要上一頁/完成）
+  document.querySelectorAll('input, select, button, textarea').forEach(el=>{ el.disabled = true; });
   const prev=$("#btnPrev"), next=$("#btnNext"), fin=$("#btnFinish");
   if(prev){ prev.style.display="none"; }
   if(next){ next.style.display="none"; }
@@ -990,7 +1021,7 @@ function lockAllAndHideNav(){
 }
 
 function showStep(pageNumber){
-  if(IS_LOCKED && pageNumber!==TOTAL_STEPS) return; /* 鎖定後不可離開完成頁 */
+  if(IS_LOCKED && pageNumber!==TOTAL_STEPS) return;
   $$(".step").forEach(s=>s.classList.remove("active"));
   const el = document.getElementById(`step-${pageNumber}`);
   if(el) el.classList.add("active");
@@ -999,15 +1030,13 @@ function showStep(pageNumber){
   $("#content").scrollTo({ top: 0, behavior: "instant" });
   updateNavState();
 
-  /* 到最後一頁即自動鎖定、隱藏上一頁與完成 */
   if(pageNumber===TOTAL_STEPS){
     setUpdatedNow();
-    // 等一個 event loop 讓畫面切到最後頁，再鎖定
     setTimeout(()=>{ lockAllAndHideNav(); updateNavState(); }, 0);
   }
 }
 
-/* ====== 各頁驗證（submit=false：不顯示紅字；true：顯示紅字） ====== */
+/* ====== 驗證邏輯 ====== */
 function isValidGmailOnSubmit(val, submit){
   val = (val||"").toLowerCase().trim();
   return submit ? /^[a-z0-9._%+-]+@gmail\.com$/.test(val) : true;
@@ -1044,7 +1073,6 @@ function validatePage(n, submit=false){
       const wageInvalid = !isValidWageStrict(v2);
       $("#errWage").style.display = (wageInvalid && shouldShowErr("wage", submit)) ? "block" : "none";
       if(wageInvalid) ok=false;
-
       return ok;
     }
     case 3: {
@@ -1069,7 +1097,6 @@ function validatePage(n, submit=false){
       const indigInvalid = $("#indigenous").value.trim()==="";
       $("#errIndigenous").style.display = (indigInvalid && shouldShowErr("indigenous", submit)) ? "block" : "none";
       if(indigInvalid) ok=false;
-
       return ok;
     }
     case 5: {
@@ -1090,7 +1117,6 @@ function validatePage(n, submit=false){
       const alInvalid = (live==="") || /同戶籍地|同戶籍/.test(live);
       $("#errAddrLive").style.display = (alInvalid && shouldShowErr("addrLive", submit)) ? "block" : "none";
       if(alInvalid) ok=false;
-
       return ok;
     }
     case 6: {
@@ -1106,7 +1132,6 @@ function validatePage(n, submit=false){
       const eInvalid = $("#edu").value.trim()==="";
       $("#errEdu").style.display = (eInvalid && shouldShowErr("edu", submit)) ? "block" : "none";
       if(eInvalid) ok=false;
-
       return ok;
     }
     case 7: {
@@ -1119,52 +1144,43 @@ function validatePage(n, submit=false){
       const nInvalid = $("#emgName").value.trim()==="";
       $("#errEmgName").style.display = (nInvalid && shouldShowErr("emgName", submit)) ? "block" : "none";
       if(nInvalid) ok=false;
-
       const rInvalid = $("#emgRel").value.trim()==="";
       $("#errEmgRel").style.display = (rInvalid && shouldShowErr("emgRel", submit)) ? "block" : "none";
       if(rInvalid) ok=false;
-
       const hInvalid = $("#homePhone").value.trim()==="";
       $("#errHomePhone").style.display = (hInvalid && shouldShowErr("homePhone", submit)) ? "block" : "none";
       if(hInvalid) ok=false;
-
       const mInvalid = !isValidMobile($("#emgMobile").value.trim());
       $("#errEmgMobile").style.display = (mInvalid && shouldShowErr("emgMobile", submit)) ? "block" : "none";
       if(mInvalid) ok=false;
-
       const addr = $("#emgAddr").value.trim();
       const aInvalid = (addr==="") || /同戶籍地|同戶籍/.test(addr);
       $("#errEmgAddr").style.display = (aInvalid && shouldShowErr("emgAddr", submit)) ? "block" : "none";
       if(aInvalid) ok=false;
-
       return ok;
     }
     case 9: {
       let ok = true;
-  const val = $("#depEnable").value;
-  const enInvalid = !val;
-  $("#errDepEnable").style.display = (enInvalid && shouldShowErr("depEnable", submit)) ? "block" : "none";
-  const show = (val==="是");
-  $("#depFields").style.display = show ? "block" : "none";
-  if(enInvalid) ok=false;
-
-  if(show){
-    const rInvalid = $("#depRel").value.trim()==="";
-    $("#errDepRel").style.display = (rInvalid && shouldShowErr("depRel", submit)) ? "block" : "none";
-    if(rInvalid) ok=false;
-
-    const nInvalid = $("#depName").value.trim()==="";
-    $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
-    if(nInvalid) ok=false;
-
-    /* 取消驗證：眷屬身分證字號、民國出生年月日 */
-    $("#errDepNid").style.display = "none";
-    $("#errDepBirth7").style.display = "none";
-  } else {
-    ["errDepRel","errDepName","errDepNid","errDepBirth7"].forEach(id=> $("#"+id).style.display="none");
-  }
-  return ok;
-}
+      const val = $("#depEnable").value;
+      const enInvalid = !val;
+      $("#errDepEnable").style.display = (enInvalid && shouldShowErr("depEnable", submit)) ? "block" : "none";
+      const show = (val==="是");
+      $("#depFields").style.display = show ? "block" : "none";
+      if(enInvalid) ok=false;
+      if(show){
+        const rInvalid = $("#depRel").value.trim()==="";
+        $("#errDepRel").style.display = (rInvalid && shouldShowErr("depRel", submit)) ? "block" : "none";
+        if(rInvalid) ok=false;
+        const nInvalid = $("#depName").value.trim()==="";
+        $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
+        if(nInvalid) ok=false;
+        $("#errDepNid").style.display = "none";
+        $("#errDepBirth7").style.display = "none";
+      } else {
+        ["errDepRel","errDepName","errDepNid","errDepBirth7"].forEach(id=> $("#"+id).style.display="none");
+      }
+      return ok;
+    }
     case 10: {
       const yes = $('input[name="agreeUpload"][value="yes"]').checked;
       $("#errAgreeUpload").style.display = (!yes && shouldShowErr("agreeUpload", submit)) ? "block":"none";
@@ -1180,8 +1196,7 @@ function validatePage(n, submit=false){
       return ok;
     }
     case 12: {
-      /* 你的規則：全部勾選才通過，不顯示錯誤訊息 */
-      const all = ["#preA","#preB","#preC","#preD","#preE","#preF","#preG","#preH"].every(sel=> $(sel).checked);
+      const all = ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].every(sel=> $(sel).checked);
       return all;
     }
     case 13: return true;
@@ -1189,49 +1204,26 @@ function validatePage(n, submit=false){
   return false;
 }
 
-/* ====== 底部操作列：狀態控制 ====== */
+/* ====== 底部操作列 ====== */
 function updateNavState(){
-  const btnPrev = $("#btnPrev"), btnNext = $("#btnNext"), btnFinish=$("#btnFinish");
+  const btnPrev = $("#btnPrev"), btnNext = $("#btnNext");
   const onLast = currentPage===TOTAL_STEPS;
-
   btnPrev.disabled = IS_LOCKED || currentPage<=1;
-  btnNext.style.display   = onLast ? "none" : "inline-block";
-  btnNext.disabled   = IS_LOCKED || !validatePage(currentPage, /*submit*/ false);
-
-  /* 安全判斷：若沒有完成按鈕，以下不執行 */
-  if(btnFinish){
-    btnFinish.style.display = onLast ? "none" : "inline-block"; /* 最後一頁不要完成 */
-    btnFinish.disabled = IS_LOCKED || onLast || currentPage!==TOTAL_STEPS; /* 最後一頁直接隱藏，不使用 */
-  }
-
+  btnNext.style.display    = onLast ? "none" : "inline-block";
+  btnNext.disabled    = IS_LOCKED || !validatePage(currentPage, false);
   if(onLast){ btnPrev.style.display="none"; } else { btnPrev.style.display="inline-block"; }
-}
-
-/* 清除當頁（函式保留但按鈕已移除） */
-function clearCurrentPage(){
-  const cur = $(`.step.active`);
-  if(!cur) return;
-  cur.querySelectorAll('input[type="text"],input[type="email"]').forEach(i=> i.value="");
-  cur.querySelectorAll('select').forEach(s=> s.selectedIndex = 0);
-  cur.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(c=> c.checked=false);
-  if(cur.id==="step-11"){
-    $("#idFront").value=""; $("#idBack").value="";
-    $("#nameFrontTxt").textContent="尚未選取檔案";
-    $("#nameBackTxt").textContent="尚未選取檔案";
-    $("#thumbFront").style.display="none"; $("#thumbBack").style.display="none";
-    $("#thumbFront").src=""; $("#thumbBack").src="";
+  
+  /* 特殊：第12頁控制提交按鈕 */
+  if(currentPage === 12){
+      const btnSubmit = $("#btnSubmit");
+      const isValid12 = validatePage(12, false);
+      if(btnSubmit) btnSubmit.disabled = !isValid12;
   }
-  cur.querySelectorAll('.error').forEach(e=> e.style.display="none");
-  if(cur.id==="step-1"){ $("#exitMsg").classList.remove("show"); }
-  updateNavState();
 }
 
-/* ====== 事件綁定與初始化 ====== */
+/* ====== 事件綁定 ====== */
 function bindLiveValidation(){
-  /* 第1頁 */
   $$('input[name="agree1"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agree1'); updateNavState(); }));
-
-  /* 第2頁 */
   ["#company","#team","#workType","#startDate","#wage"].forEach(sel=>{
     const el=$(sel); if(!el) return;
     ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
@@ -1240,17 +1232,13 @@ function bindLiveValidation(){
   $("#startDate")?.addEventListener('input', (e)=>{ const v=e.target.value.trim(); $("#errStartDate").style.display=(v!=="" && !ymdPrefixOK(v))?"block":"none"; });
   $("#wage")?.addEventListener('input', (e)=>{ const v=e.target.value.trim(); $("#errWage").style.display=(v!=="" && !wagePrefixOK(v))?"block":"none"; });
 
-  /* 第3頁 */
   $$('input[name="agreeInfo"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeInfo'); updateNavState(); }));
-
-  /* 第4頁 */
   ["#fullName","#gender","#nid","#indigenous"].forEach(sel=>{
-  const el=$(sel); if(!el) return;
-  ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-  ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+    const el=$(sel); if(!el) return;
+    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
   });
 
-  /* 第5頁 */
   ["#birthRoc7","#birthPlace","#addrHouse","#addrLive"].forEach(sel=>{
     const el=$(sel); if(!el) return;
     ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
@@ -1258,7 +1246,6 @@ function bindLiveValidation(){
   });
   $("#birthRoc7")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errBirthRoc7").style.display=(v!=="" && !digitsPrefixOK(v,7))?"block":"none"; });
 
-  /* 第6頁 */
   ["#gmail","#mobile","#edu"].forEach(sel=>{
     const el=$(sel); if(!el) return;
     ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
@@ -1266,15 +1253,12 @@ function bindLiveValidation(){
   });
   $("#gmail")?.addEventListener('input', (e)=>{
     const el=e.target; let v=(el.value||"").toLowerCase();
-    if(v.endsWith("@")) v = v + "gmail.com"; /* 方便你輸入 */
+    if(v.endsWith("@")) v = v + "gmail.com"; 
     el.value = v;
   });
   $("#mobile")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errMobile").style.display=(v!=="" && !mobilePrefixOK(v))?"block":"none"; });
 
-  /* 第7頁 */
   $$('input[name="agreeOther"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeOther'); updateNavState(); }));
-
-  /* 第8頁 */
   ["#emgName","#emgRel","#homePhone","#emgMobile","#emgAddr"].forEach(sel=>{
     const el=$(sel); if(!el) return;
     ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
@@ -1282,7 +1266,6 @@ function bindLiveValidation(){
   });
   $("#emgMobile")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errEmgMobile").style.display=(v!=="" && !mobilePrefixOK(v))?"block":"none"; });
 
-  /* 第9頁 */
   ["#depEnable","#depRel","#depName","#depNid","#depBirth7"].forEach(sel=>{
     const el=$(sel); if(!el) return;
     ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
@@ -1290,10 +1273,8 @@ function bindLiveValidation(){
   });
   $("#depEnable")?.addEventListener('change', ()=>{ updateNavState(); });
 
-  /* 第10頁 同意 */
   $$('input[name="agreeUpload"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeUpload'); updateNavState(); }));
 
-  /* 第11頁 檔名 + 縮圖 */
   function bindPreview(inputSel, nameTxtSel, thumbSel){
     const input=$(inputSel), nameTxt=$(nameTxtSel), thumb=$(thumbSel);
     if(!input) return;
@@ -1312,9 +1293,9 @@ function bindLiveValidation(){
   bindPreview("#idBack","#nameBackTxt","#thumbBack");
   ["#chk1","#chk2","#chk3","#chk4"].forEach(sel=> $(sel)?.addEventListener('change', updateNavState));
 
-  /* 第12頁（你的 8 個勾選） */
-  ["#preA","#preB","#preC","#preD","#preE","#preF","#preG","#preH"].forEach(sel=>{
-    $(sel)?.addEventListener('change', ()=>{ markTouched('preflight'); updateNavState(); });
+  /* 第12頁 Checkbox */
+  ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].forEach(sel=>{
+    $(sel)?.addEventListener('change', ()=>{ updateNavState(); });
   });
 }
 
@@ -1330,26 +1311,15 @@ function autoFitActionbarHeight(){
   ro.observe(bar);
 })();
 
-/* ====== 導航/完成 ====== */
 function bindActionBar(){
   $("#btnPrev").addEventListener("click", ()=>{ if(!IS_LOCKED && currentPage>1){ showStep(currentPage-1); } });
   $("#btnNext").addEventListener("click", ()=>{
     if(IS_LOCKED) return;
-    const ok = validatePage(currentPage, /*submit*/ true);
+    const ok = validatePage(currentPage, true);
     if(ok && currentPage<TOTAL_STEPS){ setUpdatedNow(); showStep(currentPage+1); }
   });
-  /* 安全判斷：若沒有完成按鈕，就不綁事件 */
-  const fin = $("#btnFinish");
-  if(fin){
-    fin.addEventListener("click", ()=>{
-      if(IS_LOCKED) return;
-      setUpdatedNow();
-      showStep(TOTAL_STEPS);
-    });
-  }
 }
 
-/* 初始顯示第1頁 */
 document.addEventListener("DOMContentLoaded", ()=>{
   showStep(1);
   bindLiveValidation();
