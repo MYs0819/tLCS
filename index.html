@@ -20,12 +20,12 @@
           --btn-bg: #bc2d2d;      /* 按鈕底色（可調） */
           --btn-border: #2a2a2a;  /* 按鈕邊框（可調） */
 
-          /* --------全域預設字級（可調 - 已設為報到單標準）-------- */
+          /* --------全域預設字級（可調）-------- */
           --title-size: 24px;     /* 上方頁面主標題字級（可調） */
           --content-size: 12px;   /* 預設內文小字（可調 - 注意：個別頁面有另外覆蓋） */
           --footer-size: 12px;    /* 商標；版權（可調） */
 
-           /* --------全域字級控制變數（可自行調整 - 參照報到單）--------*/
+           /* --------全域字級控制變數（可調）--------*/
           --label-size: 15px;         /* 欄位標題字級（可調） */
           --hint-size: 11px;          /* 小字提示 label small（可調） */
           --input-size: 14px;         /* 輸入框/選單內文字字級（可調） */
@@ -64,7 +64,7 @@
     /* 面板背景變數（由 data-* 控制） */
     --panel-bg: linear-gradient(0deg,rgba(43,37,37,1) 0%, rgba(0,0,0,1) 100%);
         
-    /* --------第10頁：範例圖片尺寸/外觀（可自行調整）-------- */
+    /* --------第10頁：範例圖片尺寸/外觀（可調）-------- */
     --sample-gap: 10px;         /* 圖片之間的間距（可調） */
     --sample-max-h: 180px;      /* 圖片最大高度（可調） */
     --sample-pad: 8px;          /* 每張圖外框內距（可調） */
@@ -208,7 +208,7 @@
 
   .error { color: var(--danger); margin-top: 6px; font-size: var(--error-size); display:none; }
   
-  /* ★★★ 修正 Radio Label 字體大小，跟隨 content-size (15px) ★★★ */
+  /* Radio Label 字體大小，跟隨 content-size (15px) ★★★ */
   .radio-row label { font-size: var(--content-size); font-weight: 700; }
 
   /* iOS Safari：避免聚焦自動放大 */
@@ -674,7 +674,7 @@
             <label><input type="checkbox" id="preD"> 4. 上傳檔案都符合本公司格式.</label>
             <label><input type="checkbox" id="preE"> 5. 本表單有提供檢核表,請確實檢查後再勾選.</label>
             <label><input type="checkbox" id="preF"> 5-1. 若勾選後還填寫錯誤,請自負責任.</label>
-            <label><input type="checkbox" id="preG"> 6. 提交表單後無法更改資訊,請確認填寫資料正確再提交.</label>
+            <label><input type="checkbox" id="preG"> 6. 確認填寫資料正確再提交,提交後無法更改.</label>
           </div>
         </div>
         <div class="right-actions" style="display:flex; gap:10px; justify-content:center; position:relative; bottom:0; margin-top:20px;">
@@ -685,7 +685,7 @@
       <section class="step" data-page="13" id="step-13">
         <h2>✅ 全數完成</h2>
         <div style="text-align:center; line-height:1.8;">
-          © 勞工名卡建檔表
+          © 勞工名卡建檔
           <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
           <div>❗️請截圖此畫面給承辦人</div>
           <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
@@ -708,7 +708,7 @@
 
     <footer class="footer" id="footer">
       <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
-      ︳© Copyright 2025 MYs System-b1.0.0-11-13~11-26
+      ︳© Copyright 2025 MYs System-b1.0.73-11-13~11-27
     </footer>
   </div>
 
@@ -716,7 +716,7 @@
 /* --------系統常數（可調）-------- */
 const TOTAL_STEPS = 13;  /* 總頁數（可調） */
 /* ★★★ 請確認此處 GAS 網址是否為最新 ★★★ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwptYsUxW572V-UjYzA-qDCVVbyWhIm-HRx-QNgKvMO2v2Y_tEtntXzKNWDHG_NM9Sk/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyncVzIPUAQ4U9Mx_ahlGX-wCFwVAIr9hyXYf7LIAhJ-kNwrwwCrzBA3fP4Litq_bQ/exec";
 
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -738,7 +738,7 @@ function updateStampUI(){
 
 /* ====== 密碼進入遮罩（可調） ====== */
 /* 密碼組，可隨時修改或新增 */
-const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"]; 
+const PASSWORDS = ["MYsDC714", "MYsFZ714", "MYsSC714"]; 
 (function passGateInit(){
   const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
   const togglePwdButton = $("#togglePwdVisibility");
@@ -783,7 +783,7 @@ async function submitData() {
     if (!btn) return;
 
     const originalText = btn.textContent;
-    btn.textContent = "⏳ 資料傳送中...";
+    btn.textContent = "⏳ 資料傳送中,請勿關閉此介面...";
     btn.disabled = true;
 
     const payload = {
@@ -1288,3 +1288,5 @@ document.addEventListener("DOMContentLoaded", ()=>{
   updateStampUI();
 });
 </script>
+</body>
+</html>
