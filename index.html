@@ -714,231 +714,231 @@
 
 <script>
 /* --------系統常數（可調）-------- */
-const TOTAL_STEPS = 13;  /* 總頁數（可調） */
+const TOTAL_STEPS = 13;  /* 總頁數（可調） */
 /* ★★★ 請確認此處 GAS 網址是否為最新 ★★★ */
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyncVzIPUAQ4U9Mx_ahlGX-wCFwVAIr9hyXYf7LIAhJ-kNwrwwCrzBA3fP4Litq_bQ/exec";
 
-const $  = (sel) => document.querySelector(sel);
+const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 /* 表單時間戳（建立/更新） */
 const FORM_META = { createdAt: null, updatedAt: null };
 function fmtTW(d){
-  try{
-    return new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Asia/Taipei'}).format(d);
-  }catch(e){ return d.toLocaleString(); }
+  try{
+    return new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Asia/Taipei'}).format(d);
+  }catch(e){ return d.toLocaleString(); }
 }
 function setCreatedNow(){ if(!FORM_META.createdAt){ FORM_META.createdAt = new Date(); updateStampUI(); } }
 function setUpdatedNow(){ FORM_META.updatedAt = new Date(); updateStampUI(); }
 function updateStampUI(){
-  const c = $("#stampCreated"), u = $("#stampUpdated");
-  if(c){ c.textContent = FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : "—"; }
-  if(u){ u.textContent = FORM_META.updatedAt ? fmtTW(FORM_META.updatedAt) : "—"; }
+  const c = $("#stampCreated"), u = $("#stampUpdated");
+  if(c){ c.textContent = FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : "—"; }
+  if(u){ u.textContent = FORM_META.updatedAt ? fmtTW(FORM_META.updatedAt) : "—"; }
 }
 
 /* ====== 密碼進入遮罩（可調） ====== */
 /* 密碼組，可隨時修改或新增 */
-const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"]; 
+const PASSWORDS = ["MYsDC714", "MYsFZ714", "MYsSC714"]; 
 (function passGateInit(){
-  const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
-  const togglePwdButton = $("#togglePwdVisibility");
-  if (!gate) return;
+  const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
+  const togglePwdButton = $("#togglePwdVisibility");
+  if (!gate) return;
 
-  let isPasswordVisible = false;
-  togglePwdButton.addEventListener("click", () => {
-    isPasswordVisible = !isPasswordVisible;
-    pwd.type = isPasswordVisible ? "text" : "password";
-    togglePwdButton.textContent = isPasswordVisible ? "隱藏密碼" : "顯示密碼";
-  });
+  let isPasswordVisible = false;
+  togglePwdButton.addEventListener("click", () => {
+    isPasswordVisible = !isPasswordVisible;
+    pwd.type = isPasswordVisible ? "text" : "password";
+    togglePwdButton.textContent = isPasswordVisible ? "隱藏密碼" : "顯示密碼";
+  });
 
-  err.style.display = "none";
-  btn.addEventListener("click", () => {
-    const v = (pwd.value || "").trim().toLowerCase();
-    const isValid = PASSWORDS.some(p => p.toLowerCase() === v);
-    if (!isValid) { err.style.display = "block"; return; }
-    err.style.display = "none";
-    gate.style.display = "none";
-    setCreatedNow();
-    autoFitActionbarHeight();
-  });
+  err.style.display = "none";
+  btn.addEventListener("click", () => {
+    const v = (pwd.value || "").trim().toLowerCase();
+    const isValid = PASSWORDS.some(p => p.toLowerCase() === v);
+    if (!isValid) { err.style.display = "block"; return; }
+    err.style.display = "none";
+    gate.style.display = "none";
+    setCreatedNow();
+    autoFitActionbarHeight();
+  });
 })();
 
 /* ====== 檔案轉 Base64 工具 (提交用) ====== */
 function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        if(!file) { resolve(null); return; }
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            const base64 = reader.result.split(',')[1];
-            resolve({ name: file.name, mimeType: file.type, base64: base64 });
-        };
-        reader.onerror = error => reject(error);
-    });
+    return new Promise((resolve, reject) => {
+        if(!file) { resolve(null); return; }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const base64 = reader.result.split(',')[1];
+            resolve({ name: file.name, mimeType: file.type, base64: base64 });
+        };
+        reader.onerror = error => reject(error);
+    });
 }
 
 /* ====== 提交資料邏輯（轉圈圈 + 傳送） ====== */
 async function submitData() {
-    const btn = $("#btnSubmit");
-    if (!btn) return;
+    const btn = $("#btnSubmit");
+    if (!btn) return;
 
-    const originalText = btn.textContent;
-    btn.textContent = "⏳ 資料傳送中...";
-    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "⏳ 資料傳送中,請勿關閉...";
+    btn.disabled = true;
 
-    const payload = {
-        formType: "nameCard", /* 識別碼（需與 GAS 對應） */
-        createdAt: FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : '',
-        
-        company:    $("#company").value,
-        team:       $("#team").value,
-        workType:   $("#workType").value,
-        startDate:  $("#startDate").value,
-        wage:       $("#wage").value,
-        
-        fullName:   $("#fullName").value,
-        gender:     $("#gender").value,
-        nid:        $("#nid").value,
-        indigenous: $("#indigenous").value,
-        
-        birthRoc7:  $("#birthRoc7").value,
-        birthPlace: $("#birthPlace").value,
-        addrHouse:  $("#addrHouse").value,
-        addrLive:   $("#addrLive").value,
-        
-        gmail:      $("#gmail").value,
-        mobile:     $("#mobile").value,
-        edu:        $("#edu").value,
-        
-        depEnable:  $("#depEnable").value,
-        depRel:     $("#depRel").value,
-        depName:    $("#depName").value,
-        depNid:     $("#depNid").value,
-        depBirth7:  $("#depBirth7")?.value || "", 
+    const payload = {
+        formType: "nameCard", /* 識別碼（需與 GAS 對應） */
+        createdAt: FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : '',
+        
+        company:    $("#company").value,
+        team:       $("#team").value,
+        workType:   $("#workType").value,
+        startDate:  $("#startDate").value,
+        wage:       $("#wage").value,
+        
+        fullName:   $("#fullName").value,
+        gender:     $("#gender").value,
+        nid:        $("#nid").value,
+        indigenous: $("#indigenous").value,
+        
+        birthRoc7:  $("#birthRoc7").value,
+        birthPlace: $("#birthPlace").value,
+        addrHouse:  $("#addrHouse").value,
+        addrLive:   $("#addrLive").value,
+        
+        gmail:      $("#gmail").value,
+        mobile:     $("#mobile").value,
+        edu:        $("#edu").value,
+        
+        depEnable:  $("#depEnable").value,
+        depRel:     $("#depRel").value,
+        depName:    $("#depName").value,
+        depNid:     $("#depNid").value,
+        depBirth7:  $("#depBirth7")?.value || "", 
 
-        emgName:    $("#emgName").value,
-        emgRel:     $("#emgRel").value,
-        homePhone:  $("#homePhone").value,
-        emgMobile:  $("#emgMobile").value,
-        emgAddr:    $("#emgAddr").value,
-        
-        fileFront: null, 
-        fileBack: null
-    };
+        emgName:    $("#emgName").value,
+        emgRel:     $("#emgRel").value,
+        homePhone:  $("#homePhone").value,
+        emgMobile:  $("#emgMobile").value,
+        emgAddr:    $("#emgAddr").value,
+        
+        fileFront: null, 
+        fileBack: null
+    };
 
-    try {
-        const f1 = $("#idFront").files[0];
-        const f2 = $("#idBack").files[0];
+    try {
+        const f1 = $("#idFront").files[0];
+        const f2 = $("#idBack").files[0];
 
-        if (f1) payload.fileFront = await fileToBase64(f1);
-        if (f2) payload.fileBack  = await fileToBase64(f2);
+        if (f1) payload.fileFront = await fileToBase64(f1);
+        if (f2) payload.fileBack  = await fileToBase64(f2);
 
-        const response = await fetch(GAS_URL, {
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
-        const res = await response.json();
+        const response = await fetch(GAS_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
+        const res = await response.json();
 
-        if (res.status === 'ok') {
-            showStep(13); /* 成功 -> 跳至完成頁 */
-        } else {
-            alert("❌ " + (res.status === 'duplicate' ? "你/妳已經填寫過..." : "錯誤: " + res.message));
-            btn.textContent = originalText;
-            btn.disabled = false;
-        }
-    } catch (err) {
-        alert("⚠️ 傳送失敗，請聯繫人資承辦...");
-        console.error(err);
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
+        if (res.status === 'ok') {
+            showStep(13); /* 成功 -> 跳至完成頁 */
+        } else {
+            alert("❌ " + (res.status === 'duplicate' ? "你/妳已經填寫過..." : "錯誤: " + res.message));
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    } catch (err) {
+        alert("⚠️ 傳送失敗，請聯繫人資承辦...");
+        console.error(err);
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
 }
 
 document.getElementById('btnSubmit')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    submitData();
+    e.preventDefault();
+    submitData();
 });
 
 /* ====== 鍵盤與縮放控制（iOS） ====== */
 (function keyboardLift(){
-  const vv = window.visualViewport;
-  if(!vv) return;
-  function apply(){
-    const bottomInset = (window.innerHeight - vv.height - vv.offsetTop);
-    document.documentElement.style.setProperty('--kv-offset', bottomInset>0 ? `${bottomInset}px` : '0px');
-    if(bottomInset > 80){ document.body.classList.add('kb-open'); }
-    else { document.body.classList.remove('kb-open'); }
-    autoFitActionbarHeight();
-  }
-  vv.addEventListener('resize', apply);
-  vv.addEventListener('scroll', apply);
-  window.addEventListener('resize', apply);
-  apply();
+  const vv = window.visualViewport;
+  if(!vv) return;
+  function apply(){
+    const bottomInset = (window.innerHeight - vv.height - vv.offsetTop);
+    document.documentElement.style.setProperty('--kv-offset', bottomInset>0 ? `${bottomInset}px` : '0px');
+    if(bottomInset > 80){ document.body.classList.add('kb-open'); }
+    else { document.body.classList.remove('kb-open'); }
+    autoFitActionbarHeight();
+  }
+  vv.addEventListener('resize', apply);
+  vv.addEventListener('scroll', apply);
+  window.addEventListener('resize', apply);
+  apply();
 })();
 
 (function focusAutoScroll(){
-  document.addEventListener('focusin', (e)=>{
-    const el = e.target;
-    if(!(el instanceof HTMLInputElement) && !(el instanceof HTMLSelectElement)) return;
-    setTimeout(()=>{ el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 50);
-  });
+  document.addEventListener('focusin', (e)=>{
+    const el = e.target;
+    if(!(el instanceof HTMLInputElement) && !(el instanceof HTMLSelectElement)) return;
+    setTimeout(()=>{ el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 50);
+  });
 })();
 
 /* ====== 驗證工具函式 ====== */
 function isValidYMD(str){
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(str)) return false;
-  const [y,m,d]=str.split("-").map(n=>parseInt(n,10));
-  const dt = new Date(y, m-1, d);
-  return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(str)) return false;
+  const [y,m,d]=str.split("-").map(n=>parseInt(n,10));
+  const dt = new Date(y, m-1, d);
+  return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
 }
 function isTenAlnum(s){ return /^[A-Za-z0-9]{10}$/.test(s); }
 function isValidMobile(s){ return /^09\d{2}-\d{3}-\d{3}$/.test(s); }
 function isValidWageStrict(s){
-  if(!s) return false;
-  if(/^\d+$/.test(s)) return parseInt(s,10)>0;
-  if(/^\d{1,3}(,\d{3})+$/.test(s)) return true;
-  return false;
+  if(!s) return false;
+  if(/^\d+$/.test(s)) return parseInt(s,10)>0;
+  if(/^\d{1,3}(,\d{3})+$/.test(s)) return true;
+  return false;
 }
 function isValidRoc7(str){
-  if(!/^\d{7}$/.test(str)) return false;
-  const y = parseInt(str.slice(0,3),10) + 1911;
-  const m = parseInt(str.slice(3,5),10);
-  const d = parseInt(str.slice(5,7),10);
-  const dt = new Date(y, m-1, d);
-  return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
+  if(!/^\d{7}$/.test(str)) return false;
+  const y = parseInt(str.slice(0,3),10) + 1911;
+  const m = parseInt(str.slice(3,5),10);
+  const d = parseInt(str.slice(5,7),10);
+  const dt = new Date(y, m-1, d);
+  return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
 }
 
 /* 前綴檢查（即時紅字輔助） */
 function mobilePrefixOK(v){
-  const len = v.length;
-  for(let i=0;i<len;i++){
-    const ch = v[i];
-    if(i===0){ if(ch!=='0') return false; continue; }
-    if(i===1){ if(ch!=='9') return false; continue; }
-    if(i===4 || i===8){ if(ch!=='-') return false; continue; }
-    if(i!==4 && i!==8){ if(ch<'0' || ch>'9') return false; }
-  }
-  return true;
+  const len = v.length;
+  for(let i=0;i<len;i++){
+    const ch = v[i];
+    if(i===0){ if(ch!=='0') return false; continue; }
+    if(i===1){ if(ch!=='9') return false; continue; }
+    if(i===4 || i===8){ if(ch!=='-') return false; continue; }
+    if(i!==4 && i!==8){ if(ch<'0' || ch>'9') return false; }
+  }
+  return true;
 }
 function ymdPrefixOK(v){
-  for(let i=0;i<v.length;i++){
-    const ch = v[i];
-    if(i===4 || i===7){ if(ch!=='-') return false; }
-    else { if(ch<'0' || ch>'9') return false; }
-  }
-  return true;
+  for(let i=0;i<v.length;i++){
+    const ch = v[i];
+    if(i===4 || i===7){ if(ch!=='-') return false; }
+    else { if(ch<'0' || ch>'9') return false; }
+  }
+  return true;
 }
 function wagePrefixOK(v){
-  if(v==="" ) return true;
-  if(!/^[\d,]+$/.test(v)) return false;
-  const parts = v.split(",");
-  if(parts[0].length<1 || parts[0].length>3 || !/^\d+$/.test(parts[0])) return false;
-  for(let i=1;i<parts.length;i++){
-    const seg = parts[i];
-    if(i < parts.length-1){ if(!/^\d{3}$/.test(seg)) return false; }
-    else{ if(!/^\d{0,3}$/.test(seg)) return false; }
-  }
-  return true;
+  if(v==="" ) return true;
+  if(!/^[\d,]+$/.test(v)) return false;
+  const parts = v.split(",");
+  if(parts[0].length<1 || parts[0].length>3 || !/^\d+$/.test(parts[0])) return false;
+  for(let i=1;i<parts.length;i++){
+    const seg = parts[i];
+    if(i < parts.length-1){ if(!/^\d{3}$/.test(seg)) return false; }
+    else{ if(!/^\d{0,3}$/.test(seg)) return false; }
+  }
+  return true;
 }
 function digitsPrefixOK(v, max){ return v.length<=max && /^\d*$/.test(v); }
 
@@ -955,337 +955,337 @@ function pad2(n){ return String(n).padStart(2,'0'); }
 function pageIsPurple(n){ return [1,3,7,10,12].includes(n); }
 
 function updateHeaderStep(){
-  $("#headerStep").textContent = `第${pad2(currentPage)}頁/共${TOTAL_STEPS}頁`;
-  const scheme = pageIsPurple(currentPage) ? "purple" : "black";
-  $(".container").setAttribute("data-scheme", scheme);
+  $("#headerStep").textContent = `第${pad2(currentPage)}頁/共${TOTAL_STEPS}頁`;
+  const scheme = pageIsPurple(currentPage) ? "purple" : "black";
+  $(".container").setAttribute("data-scheme", scheme);
 }
 
 function lockAllAndHideNav(){
-  IS_LOCKED = true;
-  document.querySelectorAll('input, select, button, textarea').forEach(el=>{ el.disabled = true; });
-  const prev=$("#btnPrev"), next=$("#btnNext"), fin=$("#btnFinish");
-  if(prev){ prev.style.display="none"; }
-  if(next){ next.style.display="none"; }
-  if(fin){ fin.style.display="none"; }
+  IS_LOCKED = true;
+  document.querySelectorAll('input, select, button, textarea').forEach(el=>{ el.disabled = true; });
+  const prev=$("#btnPrev"), next=$("#btnNext"), fin=$("#btnFinish");
+  if(prev){ prev.style.display="none"; }
+  if(next){ next.style.display="none"; }
+  if(fin){ fin.style.display="none"; }
 }
 
 function showStep(pageNumber){
-  if(IS_LOCKED && pageNumber!==TOTAL_STEPS) return;
-  $$(".step").forEach(s=>s.classList.remove("active"));
-  const el = document.getElementById(`step-${pageNumber}`);
-  if(el) el.classList.add("active");
-  currentPage = pageNumber;
-  updateHeaderStep();
-  $("#content").scrollTo({ top: 0, behavior: "instant" });
-  updateNavState();
+  if(IS_LOCKED && pageNumber!==TOTAL_STEPS) return;
+  $$(".step").forEach(s=>s.classList.remove("active"));
+  const el = document.getElementById(`step-${pageNumber}`);
+  if(el) el.classList.add("active");
+  currentPage = pageNumber;
+  updateHeaderStep();
+  $("#content").scrollTo({ top: 0, behavior: "instant" });
+  updateNavState();
 
-  if(pageNumber===TOTAL_STEPS){
-    setUpdatedNow();
-    setTimeout(()=>{ lockAllAndHideNav(); updateNavState(); }, 0);
-  }
+  if(pageNumber===TOTAL_STEPS){
+    setUpdatedNow();
+    setTimeout(()=>{ lockAllAndHideNav(); updateNavState(); }, 0);
+  }
 }
 
 /* ====== 各頁驗證規則（submit=false：不顯示紅字；true：顯示紅字） ====== */
 function isValidGmailOnSubmit(val, submit){
-  val = (val||"").toLowerCase().trim();
-  return submit ? /^[a-z0-9._%+-]+@gmail\.com$/.test(val) : true;
+  val = (val||"").toLowerCase().trim();
+  return submit ? /^[a-z0-9._%+-]+@gmail\.com$/.test(val) : true;
 }
 
 function validatePage(n, submit=false){
-  switch(n){
-    case 1: {
-      const yes = $('input[name="agree1"][value="yes"]').checked;
-      const no  = $('input[name="agree1"][value="no"]').checked;
-      $("#exitMsg").classList.toggle("show", no && !yes);
-      return yes;
-    }
-    case 2: {
-      let ok = true;
-      const companyInvalid = $("#company").value.trim()==="";
-      $("#errcompany").style.display = (companyInvalid && shouldShowErr("company", submit)) ? "block" : "none";
-      if(companyInvalid) ok=false;
+  switch(n){
+    case 1: {
+      const yes = $('input[name="agree1"][value="yes"]').checked;
+      const no  = $('input[name="agree1"][value="no"]').checked;
+      $("#exitMsg").classList.toggle("show", no && !yes);
+      return yes;
+    }
+    case 2: {
+      let ok = true;
+      const companyInvalid = $("#company").value.trim()==="";
+      $("#errcompany").style.display = (companyInvalid && shouldShowErr("company", submit)) ? "block" : "none";
+      if(companyInvalid) ok=false;
 
-      const teamInvalid = !$("#team").value;
-      $("#errTeam").style.display = (teamInvalid && shouldShowErr("team", submit)) ? "block" : "none";
-      if(teamInvalid) ok=false;
+      const teamInvalid = !$("#team").value;
+      $("#errTeam").style.display = (teamInvalid && shouldShowErr("team", submit)) ? "block" : "none";
+      if(teamInvalid) ok=false;
 
-      const workTypeInvalid = !$("#workType").value;
-      $("#errWorkType").style.display = (workTypeInvalid && shouldShowErr("workType", submit)) ? "block" : "none";
-      if(workTypeInvalid) ok=false;
+      const workTypeInvalid = !$("#workType").value;
+      $("#errWorkType").style.display = (workTypeInvalid && shouldShowErr("workType", submit)) ? "block" : "none";
+      if(workTypeInvalid) ok=false;
 
-      const v1 = $("#startDate").value.trim();
-      const startInvalid = !isValidYMD(v1);
-      $("#errStartDate").style.display = (startInvalid && shouldShowErr("startDate", submit)) ? "block" : "none";
-      if(startInvalid) ok=false;
+      const v1 = $("#startDate").value.trim();
+      const startInvalid = !isValidYMD(v1);
+      $("#errStartDate").style.display = (startInvalid && shouldShowErr("startDate", submit)) ? "block" : "none";
+      if(startInvalid) ok=false;
 
-      const v2 = $("#wage").value.trim();
-      const wageInvalid = !isValidWageStrict(v2);
-      $("#errWage").style.display = (wageInvalid && shouldShowErr("wage", submit)) ? "block" : "none";
-      if(wageInvalid) ok=false;
-      return ok;
-    }
-    case 3: {
-      const yes = $('input[name="agreeInfo"][value="yes"]').checked;
-      $("#errAgreeInfo").style.display = (!yes && shouldShowErr("agreeInfo", submit)) ? "block":"none";
-      return yes;
-    }
-    case 4: {
-      let ok = true;
-      const fnInvalid = $("#fullName").value.trim()==="";
-      $("#errFullName").style.display = (fnInvalid && shouldShowErr("fullName", submit)) ? "block" : "none";
-      if(fnInvalid) ok=false;
+      const v2 = $("#wage").value.trim();
+      const wageInvalid = !isValidWageStrict(v2);
+      $("#errWage").style.display = (wageInvalid && shouldShowErr("wage", submit)) ? "block" : "none";
+      if(wageInvalid) ok=false;
+      return ok;
+    }
+    case 3: {
+      const yes = $('input[name="agreeInfo"][value="yes"]').checked;
+      $("#errAgreeInfo").style.display = (!yes && shouldShowErr("agreeInfo", submit)) ? "block":"none";
+      return yes;
+    }
+    case 4: {
+      let ok = true;
+      const fnInvalid = $("#fullName").value.trim()==="";
+      $("#errFullName").style.display = (fnInvalid && shouldShowErr("fullName", submit)) ? "block" : "none";
+      if(fnInvalid) ok=false;
 
-      const gInvalid = !$("#gender").value;
-      $("#errGender").style.display = (gInvalid && shouldShowErr("gender", submit)) ? "block" : "none";
-      if(gInvalid) ok=false;
+      const gInvalid = !$("#gender").value;
+      $("#errGender").style.display = (gInvalid && shouldShowErr("gender", submit)) ? "block" : "none";
+      if(gInvalid) ok=false;
 
-      const nidInvalid = !isTenAlnum($("#nid").value.trim());
-      $("#errNid").style.display = (nidInvalid && shouldShowErr("nid", submit)) ? "block" : "none";
-      if(nidInvalid) ok=false;
+      const nidInvalid = !isTenAlnum($("#nid").value.trim());
+      $("#errNid").style.display = (nidInvalid && shouldShowErr("nid", submit)) ? "block" : "none";
+      if(nidInvalid) ok=false;
 
-      const indigInvalid = $("#indigenous").value.trim()==="";
-      $("#errIndigenous").style.display = (indigInvalid && shouldShowErr("indigenous", submit)) ? "block" : "none";
-      if(indigInvalid) ok=false;
-      return ok;
-    }
-    case 5: {
-      let ok = true;
-      const b7Invalid = !isValidRoc7($("#birthRoc7").value.trim());
-      $("#errBirthRoc7").style.display = (b7Invalid && shouldShowErr("birthRoc7", submit)) ? "block" : "none";
-      if(b7Invalid) ok=false;
+      const indigInvalid = $("#indigenous").value.trim()==="";
+      $("#errIndigenous").style.display = (indigInvalid && shouldShowErr("indigenous", submit)) ? "block" : "none";
+      if(indigInvalid) ok=false;
+      return ok;
+    }
+    case 5: {
+      let ok = true;
+      const b7Invalid = !isValidRoc7($("#birthRoc7").value.trim());
+      $("#errBirthRoc7").style.display = (b7Invalid && shouldShowErr("birthRoc7", submit)) ? "block" : "none";
+      if(b7Invalid) ok=false;
 
-      const bpInvalid = $("#birthPlace").value.trim()==="";
-      $("#errBirthPlace").style.display = (bpInvalid && shouldShowErr("birthPlace", submit)) ? "block" : "none";
-      if(bpInvalid) ok=false;
+      const bpInvalid = $("#birthPlace").value.trim()==="";
+      $("#errBirthPlace").style.display = (bpInvalid && shouldShowErr("birthPlace", submit)) ? "block" : "none";
+      if(bpInvalid) ok=false;
 
-      const ahInvalid = $("#addrHouse").value.trim()==="";
-      $("#errAddrHouse").style.display = (ahInvalid && shouldShowErr("addrHouse", submit)) ? "block" : "none";
-      if(ahInvalid) ok=false;
+      const ahInvalid = $("#addrHouse").value.trim()==="";
+      $("#errAddrHouse").style.display = (ahInvalid && shouldShowErr("addrHouse", submit)) ? "block" : "none";
+      if(ahInvalid) ok=false;
 
-      const live = $("#addrLive").value.trim();
-      const alInvalid = (live==="") || /同戶籍地|同戶籍/.test(live);
-      $("#errAddrLive").style.display = (alInvalid && shouldShowErr("addrLive", submit)) ? "block" : "none";
-      if(alInvalid) ok=false;
-      return ok;
-    }
-    case 6: {
-      let ok = true;
-      const gOK = isValidGmailOnSubmit($("#gmail").value, submit);
-      $("#errGmail").style.display = (submit && !gOK) ? "block" : "none";
-      if(!gOK) ok=false;
+      const live = $("#addrLive").value.trim();
+      const alInvalid = (live==="") || /同戶籍地|同戶籍/.test(live);
+      $("#errAddrLive").style.display = (alInvalid && shouldShowErr("addrLive", submit)) ? "block" : "none";
+      if(alInvalid) ok=false;
+      return ok;
+    }
+    case 6: {
+      let ok = true;
+      const gOK = isValidGmailOnSubmit($("#gmail").value, submit);
+      $("#errGmail").style.display = (submit && !gOK) ? "block" : "none";
+      if(!gOK) ok=false;
 
-      const mInvalid = !isValidMobile($("#mobile").value.trim());
-      $("#errMobile").style.display = (mInvalid && shouldShowErr("mobile", submit)) ? "block" : "none";
-      if(mInvalid) ok=false;
+      const mInvalid = !isValidMobile($("#mobile").value.trim());
+      $("#errMobile").style.display = (mInvalid && shouldShowErr("mobile", submit)) ? "block" : "none";
+      if(mInvalid) ok=false;
 
-      const eInvalid = $("#edu").value.trim()==="";
-      $("#errEdu").style.display = (eInvalid && shouldShowErr("edu", submit)) ? "block" : "none";
-      if(eInvalid) ok=false;
-      return ok;
-    }
-    case 7: {
-      const yes = $('input[name="agreeOther"][value="yes"]').checked;
-      $("#errAgreeOther").style.display = (!yes && shouldShowErr("agreeOther", submit)) ? "block":"none";
-      return yes;
-    }
-    case 8: {
-      let ok = true;
-      const nInvalid = $("#emgName").value.trim()==="";
-      $("#errEmgName").style.display = (nInvalid && shouldShowErr("emgName", submit)) ? "block" : "none";
-      if(nInvalid) ok=false;
-      const rInvalid = $("#emgRel").value.trim()==="";
-      $("#errEmgRel").style.display = (rInvalid && shouldShowErr("emgRel", submit)) ? "block" : "none";
-      if(rInvalid) ok=false;
-      const hInvalid = $("#homePhone").value.trim()==="";
-      $("#errHomePhone").style.display = (hInvalid && shouldShowErr("homePhone", submit)) ? "block" : "none";
-      if(hInvalid) ok=false;
-      const mInvalid = !isValidMobile($("#emgMobile").value.trim());
-      $("#errEmgMobile").style.display = (mInvalid && shouldShowErr("emgMobile", submit)) ? "block" : "none";
-      if(mInvalid) ok=false;
-      const addr = $("#emgAddr").value.trim();
-      const aInvalid = (addr==="") || /同戶籍地|同戶籍/.test(addr);
-      $("#errEmgAddr").style.display = (aInvalid && shouldShowErr("emgAddr", submit)) ? "block" : "none";
-      if(aInvalid) ok=false;
-      return ok;
-    }
-    case 9: {
-      let ok = true;
-      const val = $("#depEnable").value;
-      const enInvalid = !val;
-      $("#errDepEnable").style.display = (enInvalid && shouldShowErr("depEnable", submit)) ? "block" : "none";
-      const show = (val==="是");
-      $("#depFields").style.display = show ? "block" : "none";
-      if(enInvalid) ok=false;
-      if(show){
-        const rInvalid = $("#depRel").value.trim()==="";
-        $("#errDepRel").style.display = (rInvalid && shouldShowErr("depRel", submit)) ? "block" : "none";
-        if(rInvalid) ok=false;
-        const nInvalid = $("#depName").value.trim()==="";
-        $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
-        if(nInvalid) ok=false;
-        /* 眷屬身分證、生日不強制檢查 */
-        $("#errDepNid").style.display = "none";
-        $("#errDepBirth7").style.display = "none";
-      } else {
-        ["errDepRel","errDepName","errDepNid","errDepBirth7"].forEach(id=> $("#"+id).style.display="none");
-      }
-      return ok;
-    }
-    case 10: {
-      const yes = $('input[name="agreeUpload"][value="yes"]').checked;
-      $("#errAgreeUpload").style.display = (!yes && shouldShowErr("agreeUpload", submit)) ? "block":"none";
-      return yes;
-    }
-    case 11: {
-      let ok = true;
-      const f = $("#idFront").files?.length>0, b = $("#idBack").files?.length>0;
-      $("#errFront").style.display = (!f && shouldShowErr("idFront", submit))? "block":"none"; if(!f) ok=false;
-      $("#errBack").style.display  = (!b && shouldShowErr("idBack", submit)) ? "block":"none"; if(!b) ok=false;
-      const all = ["#chk1","#chk2","#chk3","#chk4"].every(sel=> $(sel).checked);
-      if(!all) ok=false;
-      return ok;
-    }
-    case 12: {
-      const all = ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].every(sel=> $(sel).checked);
-      return all;
-    }
-    case 13: return true;
-  }
-  return false;
+      const eInvalid = $("#edu").value.trim()==="";
+      $("#errEdu").style.display = (eInvalid && shouldShowErr("edu", submit)) ? "block" : "none";
+      if(eInvalid) ok=false;
+      return ok;
+    }
+    case 7: {
+      const yes = $('input[name="agreeOther"][value="yes"]').checked;
+      $("#errAgreeOther").style.display = (!yes && shouldShowErr("agreeOther", submit)) ? "block":"none";
+      return yes;
+    }
+    case 8: {
+      let ok = true;
+      const nInvalid = $("#emgName").value.trim()==="";
+      $("#errEmgName").style.display = (nInvalid && shouldShowErr("emgName", submit)) ? "block" : "none";
+      if(nInvalid) ok=false;
+      const rInvalid = $("#emgRel").value.trim()==="";
+      $("#errEmgRel").style.display = (rInvalid && shouldShowErr("emgRel", submit)) ? "block" : "none";
+      if(rInvalid) ok=false;
+      const hInvalid = $("#homePhone").value.trim()==="";
+      $("#errHomePhone").style.display = (hInvalid && shouldShowErr("homePhone", submit)) ? "block" : "none";
+      if(hInvalid) ok=false;
+      const mInvalid = !isValidMobile($("#emgMobile").value.trim());
+      $("#errEmgMobile").style.display = (mInvalid && shouldShowErr("emgMobile", submit)) ? "block" : "none";
+      if(mInvalid) ok=false;
+      const addr = $("#emgAddr").value.trim();
+      const aInvalid = (addr==="") || /同戶籍地|同戶籍/.test(addr);
+      $("#errEmgAddr").style.display = (aInvalid && shouldShowErr("emgAddr", submit)) ? "block" : "none";
+      if(aInvalid) ok=false;
+      return ok;
+    }
+    case 9: {
+      let ok = true;
+      const val = $("#depEnable").value;
+      const enInvalid = !val;
+      $("#errDepEnable").style.display = (enInvalid && shouldShowErr("depEnable", submit)) ? "block" : "none";
+      const show = (val==="是");
+      $("#depFields").style.display = show ? "block" : "none";
+      if(enInvalid) ok=false;
+      if(show){
+        const rInvalid = $("#depRel").value.trim()==="";
+        $("#errDepRel").style.display = (rInvalid && shouldShowErr("depRel", submit)) ? "block" : "none";
+        if(rInvalid) ok=false;
+        const nInvalid = $("#depName").value.trim()==="";
+        $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
+        if(nInvalid) ok=false;
+        /* 眷屬身分證、生日不強制檢查 */
+        $("#errDepNid").style.display = "none";
+        $("#errDepBirth7").style.display = "none";
+      } else {
+        ["errDepRel","errDepName","errDepNid","errDepBirth7"].forEach(id=> $("#"+id).style.display="none");
+      }
+      return ok;
+    }
+    case 10: {
+      const yes = $('input[name="agreeUpload"][value="yes"]').checked;
+      $("#errAgreeUpload").style.display = (!yes && shouldShowErr("agreeUpload", submit)) ? "block":"none";
+      return yes;
+    }
+    case 11: {
+      let ok = true;
+      const f = $("#idFront").files?.length>0, b = $("#idBack").files?.length>0;
+      $("#errFront").style.display = (!f && shouldShowErr("idFront", submit))? "block":"none"; if(!f) ok=false;
+      $("#errBack").style.display  = (!b && shouldShowErr("idBack", submit)) ? "block":"none"; if(!b) ok=false;
+      const all = ["#chk1","#chk2","#chk3","#chk4"].every(sel=> $(sel).checked);
+      if(!all) ok=false;
+      return ok;
+    }
+    case 12: {
+      const all = ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].every(sel=> $(sel).checked);
+      return all;
+    }
+    case 13: return true;
+  }
+  return false;
 }
 
 /* ====== 底部操作列：狀態控制 ====== */
 function updateNavState(){
-  const btnPrev = $("#btnPrev"), btnNext = $("#btnNext");
-  const onLast = currentPage===TOTAL_STEPS;
-  
-  /* 上一頁：第一頁禁用；最後一頁隱藏 */
-  btnPrev.disabled = IS_LOCKED || currentPage<=1;
-  if(onLast){ btnPrev.style.display="none"; } else { btnPrev.style.display="inline-block"; }
+  const btnPrev = $("#btnPrev"), btnNext = $("#btnNext");
+  const onLast = currentPage===TOTAL_STEPS;
+  
+  /* 上一頁：第一頁禁用；最後一頁隱藏 */
+  btnPrev.disabled = IS_LOCKED || currentPage<=1;
+  if(onLast){ btnPrev.style.display="none"; } else { btnPrev.style.display="inline-block"; }
 
-  /* 下一頁：
-     規則1: 最後一頁(13)隱藏
-     規則2: 第12頁(核檢區)也必須隱藏(因為該頁只有提交鈕)
-  */
-  if(onLast || currentPage===12){
-    btnNext.style.display = "none";
-  } else {
-    btnNext.style.display = "inline-block";
-    btnNext.disabled = IS_LOCKED || !validatePage(currentPage, false);
-  }
-  
-  /* 特殊：第12頁控制「提交按鈕」的禁用狀態 (需全勾選才啟用) */
-  if(currentPage === 12){
-      const btnSubmit = $("#btnSubmit");
-      const isValid12 = validatePage(12, false);
-      if(btnSubmit) btnSubmit.disabled = !isValid12;
-  }
+  /* 下一頁：
+     規則1: 最後一頁(13)隱藏
+     規則2: 第12頁(核檢區)也必須隱藏(因為該頁只有提交鈕)
+  */
+  if(onLast || currentPage===12){
+    btnNext.style.display = "none";
+  } else {
+    btnNext.style.display = "inline-block";
+    btnNext.disabled = IS_LOCKED || !validatePage(currentPage, false);
+  }
+  
+  /* 特殊：第12頁控制「提交按鈕」的禁用狀態 (需全勾選才啟用) */
+  if(currentPage === 12){
+      const btnSubmit = $("#btnSubmit");
+      const isValid12 = validatePage(12, false);
+      if(btnSubmit) btnSubmit.disabled = !isValid12;
+  }
 }
 
 /* ====== 事件綁定與初始化 ====== */
 function bindLiveValidation(){
-  $$('input[name="agree1"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agree1'); updateNavState(); }));
-  ["#company","#team","#workType","#startDate","#wage"].forEach(sel=>{
-    const el=$(sel); if(!el) return;
-    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
-  });
-  $("#startDate")?.addEventListener('input', (e)=>{ const v=e.target.value.trim(); $("#errStartDate").style.display=(v!=="" && !ymdPrefixOK(v))?"block":"none"; });
-  $("#wage")?.addEventListener('input', (e)=>{ const v=e.target.value.trim(); $("#errWage").style.display=(v!=="" && !wagePrefixOK(v))?"block":"none"; });
+  $$('input[name="agree1"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agree1'); updateNavState(); }));
+  ["#company","#team","#workType","#startDate","#wage"].forEach(sel=>{
+    const el=$(sel); if(!el) return;
+    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+  });
+  $("#startDate")?.addEventListener('input', (e)=>{ const v=e.target.value.trim(); $("#errStartDate").style.display=(v!=="" && !ymdPrefixOK(v))?"block":"none"; });
+  $("#wage")?.addEventListener('input', (e)=>{ const v=e.target.value.trim(); $("#errWage").style.display=(v!=="" && !wagePrefixOK(v))?"block":"none"; });
 
-  $$('input[name="agreeInfo"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeInfo'); updateNavState(); }));
-  ["#fullName","#gender","#nid","#indigenous"].forEach(sel=>{
-    const el=$(sel); if(!el) return;
-    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
-  });
+  $$('input[name="agreeInfo"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeInfo'); updateNavState(); }));
+  ["#fullName","#gender","#nid","#indigenous"].forEach(sel=>{
+    const el=$(sel); if(!el) return;
+    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+  });
 
-  ["#birthRoc7","#birthPlace","#addrHouse","#addrLive"].forEach(sel=>{
-    const el=$(sel); if(!el) return;
-    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
-  });
-  $("#birthRoc7")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errBirthRoc7").style.display=(v!=="" && !digitsPrefixOK(v,7))?"block":"none"; });
+  ["#birthRoc7","#birthPlace","#addrHouse","#addrLive"].forEach(sel=>{
+    const el=$(sel); if(!el) return;
+    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+  });
+  $("#birthRoc7")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errBirthRoc7").style.display=(v!=="" && !digitsPrefixOK(v,7))?"block":"none"; });
 
-  ["#gmail","#mobile","#edu"].forEach(sel=>{
-    const el=$(sel); if(!el) return;
-    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
-  });
-  $("#gmail")?.addEventListener('input', (e)=>{
-    const el=e.target; let v=(el.value||"").toLowerCase();
-    if(v.endsWith("@")) v = v + "gmail.com"; 
-    el.value = v;
-  });
-  $("#mobile")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errMobile").style.display=(v!=="" && !mobilePrefixOK(v))?"block":"none"; });
+  ["#gmail","#mobile","#edu"].forEach(sel=>{
+    const el=$(sel); if(!el) return;
+    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+  });
+  $("#gmail")?.addEventListener('input', (e)=>{
+    const el=e.target; let v=(el.value||"").toLowerCase();
+    if(v.endsWith("@")) v = v + "gmail.com"; 
+    el.value = v;
+  });
+  $("#mobile")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errMobile").style.display=(v!=="" && !mobilePrefixOK(v))?"block":"none"; });
 
-  $$('input[name="agreeOther"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeOther'); updateNavState(); }));
-  ["#emgName","#emgRel","#homePhone","#emgMobile","#emgAddr"].forEach(sel=>{
-    const el=$(sel); if(!el) return;
-    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
-  });
-  $("#emgMobile")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errEmgMobile").style.display=(v!=="" && !mobilePrefixOK(v))?"block":"none"; });
+  $$('input[name="agreeOther"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeOther'); updateNavState(); }));
+  ["#emgName","#emgRel","#homePhone","#emgMobile","#emgAddr"].forEach(sel=>{
+    const el=$(sel); if(!el) return;
+    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+  });
+  $("#emgMobile")?.addEventListener('input', (e)=>{ const v=e.target.value; $("#errEmgMobile").style.display=(v!=="" && !mobilePrefixOK(v))?"block":"none"; });
 
-  ["#depEnable","#depRel","#depName","#depNid","#depBirth7"].forEach(sel=>{
-    const el=$(sel); if(!el) return;
-    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
-    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
-  });
-  $("#depEnable")?.addEventListener('change', ()=>{ updateNavState(); });
+  ["#depEnable","#depRel","#depName","#depNid","#depBirth7"].forEach(sel=>{
+    const el=$(sel); if(!el) return;
+    ["input","change","blur"].forEach(evt=> el.addEventListener(evt, ()=>{ markTouched(el.id); }));
+    ["input","change"].forEach(evt=> el.addEventListener(evt, updateNavState));
+  });
+  $("#depEnable")?.addEventListener('change', ()=>{ updateNavState(); });
 
-  $$('input[name="agreeUpload"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeUpload'); updateNavState(); }));
+  $$('input[name="agreeUpload"]').forEach(r=> r.addEventListener('change', ()=>{ markTouched('agreeUpload'); updateNavState(); }));
 
-  function bindPreview(inputSel, nameTxtSel, thumbSel){
-    const input=$(inputSel), nameTxt=$(nameTxtSel), thumb=$(thumbSel);
-    if(!input) return;
-    let lastURL=null;
-    input.addEventListener('change', ()=>{
-      markTouched(input.id);
-      const f=input.files?.[0];
-      nameTxt.textContent = f ? f.name : "尚未選取檔案";
-      if(lastURL){ URL.revokeObjectURL(lastURL); lastURL=null; }
-      if(f && f.type.startsWith('image/')){ lastURL=URL.createObjectURL(f); thumb.src=lastURL; thumb.style.display='inline-block'; }
-      else{ thumb.style.display='none'; thumb.src=""; }
-      updateNavState();
-    });
-  }
-  bindPreview("#idFront","#nameFrontTxt","#thumbFront");
-  bindPreview("#idBack","#nameBackTxt","#thumbBack");
-  ["#chk1","#chk2","#chk3","#chk4"].forEach(sel=> $(sel)?.addEventListener('change', updateNavState));
+  function bindPreview(inputSel, nameTxtSel, thumbSel){
+    const input=$(inputSel), nameTxt=$(nameTxtSel), thumb=$(thumbSel);
+    if(!input) return;
+    let lastURL=null;
+    input.addEventListener('change', ()=>{
+      markTouched(input.id);
+      const f=input.files?.[0];
+      nameTxt.textContent = f ? f.name : "尚未選取檔案";
+      if(lastURL){ URL.revokeObjectURL(lastURL); lastURL=null; }
+      if(f && f.type.startsWith('image/')){ lastURL=URL.createObjectURL(f); thumb.src=lastURL; thumb.style.display='inline-block'; }
+      else{ thumb.style.display='none'; thumb.src=""; }
+      updateNavState();
+    });
+  }
+  bindPreview("#idFront","#nameFrontTxt","#thumbFront");
+  bindPreview("#idBack","#nameBackTxt","#thumbBack");
+  ["#chk1","#chk2","#chk3","#chk4"].forEach(sel=> $(sel)?.addEventListener('change', updateNavState));
 
-  ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].forEach(sel=>{
-    $(sel)?.addEventListener('change', ()=>{ updateNavState(); });
-  });
+  ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].forEach(sel=>{
+    $(sel)?.addEventListener('change', ()=>{ updateNavState(); });
+  });
 }
 
 function autoFitActionbarHeight(){
-  const bar = $("#actionbar"); if(!bar) return;
-  const h = bar.offsetHeight;
-  document.documentElement.style.setProperty('--actionbar-h', `${h}px`);
+  const bar = $("#actionbar"); if(!bar) return;
+  const h = bar.offsetHeight;
+  document.documentElement.style.setProperty('--actionbar-h', `${h}px`);
 }
 (function observeBar(){
-  const bar=$("#actionbar");
-  if(!bar || !('ResizeObserver' in window)) return;
-  const ro = new ResizeObserver(()=> autoFitActionbarHeight());
-  ro.observe(bar);
+  const bar=$("#actionbar");
+  if(!bar || !('ResizeObserver' in window)) return;
+  const ro = new ResizeObserver(()=> autoFitActionbarHeight());
+  ro.observe(bar);
 })();
 
 function bindActionBar(){
-  $("#btnPrev").addEventListener("click", ()=>{ if(!IS_LOCKED && currentPage>1){ showStep(currentPage-1); } });
-  $("#btnNext").addEventListener("click", ()=>{
-    if(IS_LOCKED) return;
-    const ok = validatePage(currentPage, true);
-    if(ok && currentPage<TOTAL_STEPS){ setUpdatedNow(); showStep(currentPage+1); }
-  });
+  $("#btnPrev").addEventListener("click", ()=>{ if(!IS_LOCKED && currentPage>1){ showStep(currentPage-1); } });
+  $("#btnNext").addEventListener("click", ()=>{
+    if(IS_LOCKED) return;
+    const ok = validatePage(currentPage, true);
+    if(ok && currentPage<TOTAL_STEPS){ setUpdatedNow(); showStep(currentPage+1); }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
-  showStep(1);
-  bindLiveValidation();
-  bindActionBar();
-  autoFitActionbarHeight();
-  updateStampUI();
+  showStep(1);
+  bindLiveValidation();
+  bindActionBar();
+  autoFitActionbarHeight();
+  updateStampUI();
 });
 </script>
 </body>
