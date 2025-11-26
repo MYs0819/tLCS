@@ -708,7 +708,7 @@
 
     <footer class="footer" id="footer">
       <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
-      ︳© Copyright 2025 MYs System-b1.0.73-11-13~11-27
+      ︳© Copyright 2025 MYs System-b1.0.74-11-13~11-27
     </footer>
   </div>
 
@@ -842,7 +842,7 @@ async function submitData() {
         if (res.status === 'ok') {
             showStep(13); /* 成功 -> 跳至完成頁 */
         } else {
-            alert("❌ " + (res.status === 'duplicate' ? "你/妳已經填寫過..." : "錯誤: " + res.message));
+            alert("❌ " + (res.status === 'duplicate' ? "提交失敗,你/妳已經填寫過..." : "錯誤: " + res.message));
             btn.textContent = originalText;
             btn.disabled = false;
         }
