@@ -708,7 +708,7 @@
 
     <footer class="footer" id="footer">
       <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
-      ︳© Copyright 2025 MYs System-b1.0.75-11/13~11/27
+      ︳© Copyright 2025 MYs System-b1.0.76-11/13~11/27
     </footer>
   </div>
 
@@ -737,8 +737,7 @@ function updateStampUI(){
 }
 
 /* ====== 密碼進入遮罩（可調） ====== */
-/* 密碼組，可隨時修改或新增 */
-const PASSWORDS = ["MYsDC714", "MYsFZ714", "MYsSC714"]; 
+const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"]; 
 (function passGateInit(){
   const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
   const togglePwdButton = $("#togglePwdVisibility");
@@ -783,7 +782,7 @@ async function submitData() {
     if (!btn) return;
 
     const originalText = btn.textContent;
-    btn.textContent = "⏳ 資料傳送中,請勿關閉此介面...";
+    btn.textContent = "⏳ 資料傳送中...";
     btn.disabled = true;
 
     const payload = {
@@ -842,7 +841,7 @@ async function submitData() {
         if (res.status === 'ok') {
             showStep(13); /* 成功 -> 跳至完成頁 */
         } else {
-            alert("❌ " + (res.status === 'duplicate' ? "提交失敗,你/妳已經填寫過..." : "錯誤: " + res.message));
+            alert("❌ " + (res.status === 'duplicate' ? "你/妳已經填寫過..." : "錯誤: " + res.message));
             btn.textContent = originalText;
             btn.disabled = false;
         }
@@ -1159,9 +1158,13 @@ function updateNavState(){
   const btnPrev = $("#btnPrev"), btnNext = $("#btnNext");
   const onLast = currentPage===TOTAL_STEPS;
   
-  /* 上一頁：第一頁禁用；最後一頁隱藏 */
-  btnPrev.disabled = IS_LOCKED || currentPage<=1;
-  if(onLast){ btnPrev.style.display="none"; } else { btnPrev.style.display="inline-block"; }
+  /* 上一頁：第一頁隱藏；最後一頁隱藏（修改點） */
+  if(currentPage<=1 || onLast){
+      btnPrev.style.display="none";
+  } else {
+      btnPrev.style.display="inline-block";
+      btnPrev.disabled = IS_LOCKED;
+  }
 
   /* 下一頁：
      規則1: 最後一頁(13)隱藏
