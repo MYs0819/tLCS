@@ -714,14 +714,14 @@
 
 <script>
 /* --------系統常數（可調）-------- */
-const TOTAL_STEPS = 13;  /* 總頁數（可調） */
-/* ★★★ 請確認此處 GAS 網址是否為最新 ★★★ */
+const TOTAL_STEPS = 13;  /* 總頁數 */
+/* GAS 網址 */
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyncVzIPUAQ4U9Mx_ahlGX-wCFwVAIr9hyXYf7LIAhJ-kNwrwwCrzBA3fP4Litq_bQ/exec";
 
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-/* 表單時間戳（建立/更新） */
+/* 表單時間戳 */
 const FORM_META = { createdAt: null, updatedAt: null };
 function fmtTW(d){
   try{
@@ -736,7 +736,7 @@ function updateStampUI(){
   if(u){ u.textContent = FORM_META.updatedAt ? fmtTW(FORM_META.updatedAt) : "—"; }
 }
 
-/* ====== 密碼進入遮罩（可調） ====== */
+/* ====== 密碼進入遮罩 ====== */
 const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"]; 
 (function passGateInit(){
   const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
@@ -762,7 +762,7 @@ const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"];
   });
 })();
 
-/* ====== 檔案轉 Base64 工具 (提交用) ====== */
+/* ====== 檔案轉 Base64 工具 ====== */
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         if(!file) { resolve(null); return; }
@@ -776,17 +776,18 @@ function fileToBase64(file) {
     });
 }
 
-/* ====== 提交資料邏輯（轉圈圈 + 傳送） ====== */
+/* ====== 提交資料邏輯 (勞工名卡) ====== */
 async function submitData() {
     const btn = $("#btnSubmit");
     if (!btn) return;
 
     const originalText = btn.textContent;
-    btn.textContent = "⏳ 資料傳送中...";
+    btn.textContent = "⏳ 資料傳送中,請勿關閉此介面...";
     btn.disabled = true;
 
+    /* 收集資料 */
     const payload = {
-        formType: "nameCard", /* 識別碼（需與 GAS 對應） */
+        formType: "nameCard", 
         createdAt: FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : '',
         
         company:    $("#company").value,
@@ -839,7 +840,7 @@ async function submitData() {
         const res = await response.json();
 
         if (res.status === 'ok') {
-            showStep(13); /* 成功 -> 跳至完成頁 */
+            showStep(13); /* 成功 -> 跳至第13頁 */
         } else {
             alert("❌ " + (res.status === 'duplicate' ? "你/妳已經填寫過..." : "錯誤: " + res.message));
             btn.textContent = originalText;
@@ -853,12 +854,16 @@ async function submitData() {
     }
 }
 
-document.getElementById('btnSubmit')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    submitData();
-});
+/* 綁定提交按鈕 */
+const submitBtn = document.getElementById('btnSubmit');
+if(submitBtn) {
+    submitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        submitData();
+    });
+}
 
-/* ====== 鍵盤與縮放控制（iOS） ====== */
+/* ====== 鍵盤與縮放控制 ====== */
 (function keyboardLift(){
   const vv = window.visualViewport;
   if(!vv) return;
@@ -907,7 +912,7 @@ function isValidRoc7(str){
   return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
 }
 
-/* 前綴檢查（即時紅字輔助） */
+/* 前綴檢查 */
 function mobilePrefixOK(v){
   const len = v.length;
   for(let i=0;i<len;i++){
@@ -941,16 +946,15 @@ function wagePrefixOK(v){
 }
 function digitsPrefixOK(v, max){ return v.length<=max && /^\d*$/.test(v); }
 
-/* 觸碰狀態（touched）控制 */
+/* 觸碰狀態 */
 const TOUCHED = Object.create(null);
 function markTouched(id){ if(id) TOUCHED[id] = true; }
 function shouldShowErr(id, submit){ return !!submit || !!TOUCHED[id]; }
 
-/* ====== 步驟顯示與背景配色 ====== */
+/* ====== 步驟顯示 ====== */
 let currentPage = 1;
 let IS_LOCKED = false;
 function pad2(n){ return String(n).padStart(2,'0'); }
-/* 指定頁為紫色：1,3,7,10,12；其餘黑色（可調） */
 function pageIsPurple(n){ return [1,3,7,10,12].includes(n); }
 
 function updateHeaderStep(){
@@ -962,10 +966,9 @@ function updateHeaderStep(){
 function lockAllAndHideNav(){
   IS_LOCKED = true;
   document.querySelectorAll('input, select, button, textarea').forEach(el=>{ el.disabled = true; });
-  const prev=$("#btnPrev"), next=$("#btnNext"), fin=$("#btnFinish");
+  const prev=$("#btnPrev"), next=$("#btnNext");
   if(prev){ prev.style.display="none"; }
   if(next){ next.style.display="none"; }
-  if(fin){ fin.style.display="none"; }
 }
 
 function showStep(pageNumber){
@@ -984,7 +987,7 @@ function showStep(pageNumber){
   }
 }
 
-/* ====== 各頁驗證規則（submit=false：不顯示紅字；true：顯示紅字） ====== */
+/* ====== 驗證邏輯 ====== */
 function isValidGmailOnSubmit(val, submit){
   val = (val||"").toLowerCase().trim();
   return submit ? /^[a-z0-9._%+-]+@gmail\.com$/.test(val) : true;
@@ -1122,7 +1125,6 @@ function validatePage(n, submit=false){
         const nInvalid = $("#depName").value.trim()==="";
         $("#errDepName").style.display = (nInvalid && shouldShowErr("depName", submit)) ? "block" : "none";
         if(nInvalid) ok=false;
-        /* 眷屬身分證、生日不強制檢查 */
         $("#errDepNid").style.display = "none";
         $("#errDepBirth7").style.display = "none";
       } else {
@@ -1145,6 +1147,7 @@ function validatePage(n, submit=false){
       return ok;
     }
     case 12: {
+      /* 檢核所有項目 (A~G 共7項) */
       const all = ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].every(sel=> $(sel).checked);
       return all;
     }
@@ -1158,26 +1161,27 @@ function updateNavState(){
   const btnPrev = $("#btnPrev"), btnNext = $("#btnNext");
   const onLast = currentPage===TOTAL_STEPS;
   
-  /* 上一頁：第一頁隱藏；最後一頁隱藏（修改點） */
-  if(currentPage<=1 || onLast){
-      btnPrev.style.display="none";
-  } else {
-      btnPrev.style.display="inline-block";
-      btnPrev.disabled = IS_LOCKED;
+  /* 上一頁：第一頁隱藏；最後一頁隱藏 */
+  if(btnPrev){
+      if(currentPage<=1 || onLast){
+          btnPrev.style.display="none";
+      } else {
+          btnPrev.style.display="inline-block";
+          btnPrev.disabled = IS_LOCKED;
+      }
   }
 
-  /* 下一頁：
-     規則1: 最後一頁(13)隱藏
-     規則2: 第12頁(核檢區)也必須隱藏(因為該頁只有提交鈕)
-  */
-  if(onLast || currentPage===12){
-    btnNext.style.display = "none";
-  } else {
-    btnNext.style.display = "inline-block";
-    btnNext.disabled = IS_LOCKED || !validatePage(currentPage, false);
+  /* 下一頁：第12頁隱藏(只有提交)；最後一頁隱藏 */
+  if(btnNext){
+      if(onLast || currentPage===12){
+        btnNext.style.display = "none";
+      } else {
+        btnNext.style.display = "inline-block";
+        btnNext.disabled = IS_LOCKED || !validatePage(currentPage, false);
+      }
   }
   
-  /* 特殊：第12頁控制「提交按鈕」的禁用狀態 (需全勾選才啟用) */
+  /* 第12頁：提交按鈕控制 */
   if(currentPage === 12){
       const btnSubmit = $("#btnSubmit");
       const isValid12 = validatePage(12, false);
@@ -1257,6 +1261,7 @@ function bindLiveValidation(){
   bindPreview("#idBack","#nameBackTxt","#thumbBack");
   ["#chk1","#chk2","#chk3","#chk4"].forEach(sel=> $(sel)?.addEventListener('change', updateNavState));
 
+  /* 第12頁 Checkbox 監聽 */
   ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].forEach(sel=>{
     $(sel)?.addEventListener('change', ()=>{ updateNavState(); });
   });
