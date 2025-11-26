@@ -2,133 +2,103 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <!-- 鎖縮放：避免打字後需要自行縮小；搭配 iOS 聚焦字級=16 一起使用 -->
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no" />
-  <title>📝 勞工名卡建檔</title>
+  <title>📝 勞工名卡建檔表</title>
 
   <style>
       :root {
-           /* -----------GAS部署網址再892行------------ */
-           /* --------系統共用常數（可全站調整）-------- */
-          --card-w: 980px;       /* 表單面板最大寬度（可調） */
-          --radius: 16px;        /* 面板圓角（可調） */
-          --border: #2a2a2a;     /* 邊框色（可調） */
-          --ink: #eaeaea;        /* 主要文字色（可調） */
-          --muted: #bcbcbc;      /* 次要文字色（與 ⏍ 同色） ← 依需求改這一行 */
-          --danger: #fff2cc;     /* 錯誤色（可調；黃色） */
-          --ok: #22c55e;         /* 成功/通過色（可調） */
-          --accent: #60a5fa;     /* 重點色/聚焦邊框（可調） */
-          --btn-bg: #bc2d2d;     /* 按鈕底色（可調） */
-          --btn-border: #2a2a2a; /* 按鈕邊框（可調） */
+          /* --------系統共用常數（嚴格參照報到須知單原始數值）-------- */
+          --card-w: 980px;        /* 表單面板最大寬度 */
+          --radius: 16px;         /* 面板圓角 */
+          --border: #2a2a2a;      /* 邊框色 */
+          --ink: #eaeaea;         /* 主要文字色 */
+          --muted: #bcbcbc;       /* 次要文字色 */
+          --danger: #fff2cc;      /* 錯誤色（黃色） */
+          --ok: #22c55e;          /* 成功色 */
+          --accent: #60a5fa;      /* 重點色/聚焦邊框 */
+          --btn-bg: #bc2d2d;      /* 按鈕底色 */
+          --btn-border: #2a2a2a;  /* 按鈕邊框 */
 
-          --title-size: 24px;    /* 上方頁面主標題字級（可調） */
-          --content-size: 12px;  /* 密碼之確定、頁數、上下一頁（可調） */
-          --footer-size: 12px;   /* 商標；版權（可調） */
+          --title-size: 24px;     /* 上方頁面主標題字級 */
+          --content-size: 12px;   /* ★ 恢復為 12px */
+          --footer-size: 12px;    /* 商標；版權 */
 
-           /* --------全域字級控制變數（可自行調整）--------*/
-          --label-size: 15px;        /* 欄位標題字級（例如：公司名稱；可調） */
-          --hint-size: 11px;         /* 小字提示（label small；可調） */
-          --input-size: 14px;        /* 輸入框/選單內文字字級（可調） */
-          --placeholder-size: 14px;  /* placeholder 字級（可調） */
-          --error-size: 14px;        /* 錯誤訊息字級（可調） */
+           /* --------全域字級控制變數（嚴格參照報到須知單）--------*/
+          --label-size: 15px;         /* ★ 恢復為 15px */
+          --hint-size: 11px;          /* ★ 恢復為 11px */
+          --input-size: 14px;         /* ★ 恢復為 14px */
+          --placeholder-size: 14px;   /* placeholder 字級 */
+          --error-size: 14px;         /* 錯誤訊息字級 */
 
-          --section-gap: 16px;       /* 區塊與段落間距（可調） */
-          --control-pad: 10px 12px;  /* 控制項內距（可調） */
-          --control-radius: 12px;    /* 控制項圓角（可調） */
-          --control-bg: #0f0f0f;     /* 控制項背景（可調） */
-          --control-border: #262626; /* 控制項邊框（可調） */
-          --control-focus: #60a5fa;  /* 控制項聚焦外框色（可調） */
+          --section-gap: 16px;        /* ★ 恢復為 16px */
+          --control-pad: 10px 12px;   /* 控制項內距 */
+          --control-radius: 12px;     /* 控制項圓角 */
+          --control-bg: #0f0f0f;      /* 控制項背景 */
+          --control-border: #262626;  /* 控制項邊框 */
+          --control-focus: #60a5fa;   /* 控制項聚焦外框色 */
 
-          --input-height: 38px;      /* 控制項高度（讓框框同高；可調） */
+          --input-height: 38px;       /* ★ 恢復為 38px */
 
-          --actionbar-h: 64px;       /* 底部固定操作列高度（可調；JS 覆蓋實際高度） */
-          --footer-h: 44px;          /* 頁尾高度（可調） */
-          --kv-offset: 0px;          /* 鍵盤彈出時向上位移量（JS 寫入） */
+          --actionbar-h: 64px;        /* 底部固定操作列高度 */
+          --footer-h: 44px;           /* 頁尾高度 */
+          --kv-offset: 0px;           /* 鍵盤位移量 */
 
-          /* -----------字級統整模組 同意；有異議----------- */
-          --fz-title: 28px;          /* ★ 大標題（步驟名稱、頁面大標） */
-          --fz-subtitle: 22px;       /* ★ 第二層標題（區塊名稱、子標題） */
-          --fz-section: 20px;        /* ★ 區段說明（多用於段落標語、章節開場） */
-          --fz-body: 18px;           /* ★ 內文正文（整份表單最常用的字） */
-          --fz-note: 16px;           /* ★ 備註、小提示、條文（例如：了解 有異議） */
-          --fz-xs: 14px;             /* ★ 特小字（很少用，通常是補充或版權） */
-    
-    /* 上一頁/下一頁縮小用（可調） */
-    --nav-btn-min-h: 32px;      /* 只影響「上一頁 / 下一頁」兩顆按鈕的最小高度（可調） */
-    --nav-btn-pad: 4px 10px;    /* 只影響「上一頁 / 下一頁」兩顆按鈕的內距（可調） */
+          /* -----------字級統整模組 同意；有異議（嚴格參照報到須知單）----------- */
+          --fz-title: 28px;           
+          --fz-subtitle: 22px;        
+          --fz-section: 20px;         
+          --fz-body: 18px;            
+          --fz-note: 16px;            /* ★ 恢復為 16px */
+          --fz-xs: 14px;              
+      
+    /* 上一頁/下一頁縮小用（嚴格參照報到須知單） */
+    --nav-btn-min-h: 32px;       /* ★ 恢復為 32px */
+    --nav-btn-pad: 4px 10px;     /* ★ 恢復為 4px 10px */
 
-    /* 操作列內距（可調，縮小整列高度） */
-    --actionbar-pad-y: 6px;     /* 操作列上下內距（可調） */
-    --actionbar-pad-x: 12px;    /* 操作列左右內距（可調） */
+    /* 操作列內距 */
+    --actionbar-pad-y: 6px;      /* ★ 恢復為 6px */
+    --actionbar-pad-x: 12px;     /* ★ 恢復為 12px */
 
-    /* 面板背景變數（由 data-* 控制） */
-    --panel-bg: linear-gradient(0deg,rgba(43,37,37,1) 0%, rgba(0,0,0,1) 100%); /* 預設黑 */
+    /* 面板背景變數 */
+    --panel-bg: linear-gradient(0deg,rgba(43,37,37,1) 0%, rgba(0,0,0,1) 100%);
         
-    /*//* --------第10頁：範例圖片尺寸/外觀（可自行調整；新增）--------*/*/
-    --sample-gap: 10px;         /* 圖片之間的間距（可調） */
-    --sample-max-h: 180px;      /* 圖片最大高度（可調） */
-    --sample-pad: 8px;          /* 每張圖外框內距（可調） */
-    --sample-bg: rgba(255,255,255,0.04); /* 圖片外框底色（可調） */
-    --sample-radius: 12px;      /* 圖片外框圓角（可調） */
+    /* --------第10頁：範例圖片尺寸/外觀（嚴格參照報到須知單）-------- */
+    --sample-gap: 10px;
+    --sample-max-h: 180px;      /* ★ 恢復為 180px */
+    --sample-pad: 8px;
+    --sample-bg: rgba(255,255,255,0.04);
+    --sample-radius: 12px;
   }
 
-    /* --------選單字體大小調整（所有選單）-------- */
+    /* --------選單字體大小調整-------- */
     select {
-        font-size: 14px !important; /* 調小所有選單的字體 */
+        font-size: 14px !important; /* 強制 14px */
     }
 
-    /* ----------統一字級------------ */
-    .fz-title {
-         font-size: var(--fz-title);
-     }
-
-     .fz-subtitle {
-         font-size: var(--fz-subtitle);
-    }
-
-    .fz-section {
-        font-size: var(--fz-section);
-     }
-
-     .fz-body {
-         font-size: var(--fz-body);
-     }
-
-     .fz-note {
-         font-size: var(--fz-note);
-    }
-
-     .fz-xs {
-            font-size: var(--fz-xs);
-     }
+    /* ----------統一字級類別------------ */
+    .fz-title { font-size: var(--fz-title); }
+    .fz-subtitle { font-size: var(--fz-subtitle); }
+    .fz-section { font-size: var(--fz-section); }
+    .fz-body { font-size: var(--fz-body); }
+    .fz-note { font-size: var(--fz-note); }
+    .fz-xs { font-size: var(--fz-xs); }
 
   /* ===== 全站背景底色 ===== */
   html, body { height: 100%; margin: 0; overflow-x: hidden; }
   body {
-    font-family:
-      "GenSenRounded",
-      "Yuanti TC",
-      "Hiragino Maru Gothic ProN",
-      "M PLUS Rounded 1c",
-      "PingFang TC",
-      "Noto Sans TC",
-      "Microsoft JhengHei",
-      "Segoe UI",
-      Arial,
-      sans-serif;
-
+    font-family: "GenSenRounded", "Yuanti TC", "Hiragino Maru Gothic ProN", "M PLUS Rounded 1c", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", "Segoe UI", Arial, sans-serif;
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    touch-action: pan-y;              /* 僅允許垂直滑動 */
-    overscroll-behavior-y: contain;   /* 抑制彈性回彈干擾 */
-    background: #000;                 /* 背景底色（面板漸層會覆蓋） */
+    touch-action: pan-y;
+    overscroll-behavior-y: contain;
+    background: #000;
   }
 
-  /* 面板（上下貼齊、內容內捲、固定底部操作列 + 頁尾） */
+  /* 面板 */
   .container {
     width: min(var(--card-w), 100vw);
-    height: 100svh; /* 使用 svh，受視口可視高度影響，鍵盤彈出更穩定 */
+    height: 100svh;
     margin: 0 auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -136,10 +106,10 @@
     display: grid;
     grid-template-rows: auto 1fr auto auto; /* header / content / actionbar / footer */
     overflow: hidden;
-    background: var(--panel-bg) !important; /* 以變數為最終背景 */
+    background: var(--panel-bg) !important;
   }
 
-  /* ===== 用 data-scheme 控制黑/紫兩種底色（取代原本紅色） ===== */
+  /* ===== data-scheme 控制底色 ===== */
   .container[data-scheme="black"]{
     --panel-bg: linear-gradient(0deg,rgba(43,37,37,1) 0%, rgba(0,0,0,1) 100%);
   }
@@ -147,32 +117,31 @@
     --panel-bg: linear-gradient(0deg,rgba(105,30,61,1) 0%, rgba(75,14,61,1) 83%, rgba(56,4,61,1) 100%);
   }
 
-  /* 頁首（中間置中標題；右上角顯示步驟） */
+  /* 頁首 */
   .header {
     position: relative;
-    padding: 12px 16px;
+    padding: 12px 16px; /* 恢復原始間距 */
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(2px);
   }
   .header-title {
-    font-weight: 900;                 /* 要粗體 */
+    font-weight: 900;
     font-size: var(--title-size);
     text-align: center;
     letter-spacing: 0.5px;
-    /* 加陰影（柔） */
     text-shadow: 0 1px 0 rgba(0,0,0,.6), 0 0 8px rgba(0,0,0,.35);
   }
   .header-step {
     position: absolute;
-    right: 12px; top: 20px;   /* 第01頁/共13頁-文字向下移 */
+    right: 12px; top: 20px; /* 恢復原始位置 */
     color: var(--muted);
     font-size: var(--content-size);
     font-weight: 700;
   }
 
-  /* 內容：只在此區滾動；底部預留操作列與頁尾高度 */
+  /* 內容區 */
   .content {
-    padding: 16px;
+    padding: 16px; /* 恢復原始內距 */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: calc(var(--actionbar-h) + var(--footer-h) + 16px);
@@ -182,9 +151,9 @@
   .step { display: none; font-size: var(--content-size); }
   .step.active { display: block; }
   .step h2 {
-    margin: 0 0 10px 0;
+    margin: 0 0 10px 0; /* 恢復原始間距 */
     font-size: var(--title-size);
-    text-align: center; /* 標題置中（最後一頁也會套用） */
+    text-align: center;
     font-weight: 800;
   }
 
@@ -192,18 +161,19 @@
     margin: 8px 0 16px 1.2em;
     color: var(--muted);
     line-height: 1.7;
+    /* font-size: 15px; 移除自訂放大，吃預設 */
   }
 
   .fieldset {
     border: 1px dashed var(--border);
     border-radius: var(--control-radius);
-    padding: 14px;
+    padding: 14px; /* 恢復原始內距 */
     margin-top: var(--section-gap);
   }
 
-  /* 第1頁特別：整組置中 + 選項置中 */
+  /* 置中區塊 */
   .center-block { display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
-  .radio-row { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; }
+  .radio-row { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; } /* 恢復原始間距 */
   .exit {
     background: rgba(250, 204, 21, .10);
     border: 1px solid rgba(250, 204, 21, .45);
@@ -212,7 +182,7 @@
   }
   .exit.show { display:block;}
 
-  /* 表單控制項（統一寬高 + 與 ⏍ 同色） */
+  /* 表單控制項 */
   label { font-weight: 700; display:block; margin-bottom:6px; font-size: var(--label-size, var(--content-size)); }
   label small { color: var(--muted); font-weight: 600; margin-left:4px; font-size: var(--hint-size, var(--content-size)); }
   .row { margin-bottom: var(--section-gap); }
@@ -224,7 +194,7 @@
     border: 1px solid var(--control-border);
     border-radius: var(--control-radius);
     outline: none;
-    color: var(--muted) !important;  /* 與 ⏍ 同色 */
+    color: var(--muted) !important;
     font-size: var(--input-size);
     height: var(--input-height);
     box-sizing: border-box;
@@ -233,21 +203,21 @@
   input:focus, select:focus { border-color: var(--control-focus); box-shadow: 0 0 0 3px rgba(96,165,250,.25); }
 
   .error { color: var(--danger); margin-top: 6px; font-size: var(--error-size); display:none; }
+  
   .radio-row label { font-size: var(--content-size); font-weight: 700; }
 
-  /* iOS Safari：避免聚焦自動放大
-     策略：iOS 上「聚焦時字級 16px」，離焦回 12px；並且 meta 鎖最大縮放=1。 */
+  /* iOS Safari 聚焦 */
   @supports (-webkit-touch-callout: none) {
     input[type="text"]:focus, input[type="email"]:focus, select:focus { font-size: 16px !important; }
   }
 
-  /* 強制 select 仍用與 ⏍ 同色（覆蓋可能的環境差異） */
+  /* 強制 select 仍用與 ⏍ 同色 */
   select { font-size: var(--input-size) !important; color: var(--muted) !important; }
 
-  /* 檔案上傳（同一排顯示縮圖） */
+  /* 檔案上傳 */
   .file-row {
     display: grid;
-    grid-template-columns: 1fr auto 1.2fr; /* 左：文字；中：按鈕；右：檔名 + 縮圖 */
+    grid-template-columns: 1fr auto 1.2fr;
     gap: 10px; align-items: center; margin-bottom: var(--section-gap);
   }
   .file-name {
@@ -263,14 +233,13 @@
   .file-input input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .file-btn {
     appearance: none; border: 1px solid var(--btn-border); background: var(--btn-bg); color: var(--ink);
-    padding: 10px 14px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: var(--content-size); min-height: var(--input-height);
-    display: inline-flex; align-items: center;
+    padding: 10px 14px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: var(--content-size); 
+    min-height: var(--input-height); display: inline-flex; align-items: center;
   }
 
-  /* 只縮小「上一頁 / 下一頁 / 完成」三顆按鈕（保留原註解，不影響功能） */
+  /* 操作列 */
   .btn--nav { min-height: var(--nav-btn-min-h); padding: var(--nav-btn-pad); }
 
-  /* 底部固定操作列（全頁共用） */
   .actionbar {
     position: relative; display:flex; gap:10px; justify-content:space-between; align-items:center;
     padding: var(--actionbar-pad-y) var(--actionbar-pad-x) calc(var(--actionbar-pad-y) + env(safe-area-inset-bottom));
@@ -282,7 +251,7 @@
     padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer; font-size:var(--content-size); min-height:var(--input-height); }
   .btn:disabled { opacity:.55; cursor:not-allowed; }
 
-  /* Sticky Footer（每頁都會看到） */
+  /* Footer */
   .footer {
     border-top:1px solid var(--border);
     padding:10px 14px calc(10px + env(safe-area-inset-bottom));
@@ -291,41 +260,16 @@
     transform: translateY(calc(-1 * var(--kv-offset)));
   }
 
-  /* 鍵盤開啟時：隱藏底部操作列，避免擋住視線 */
   body.kb-open .actionbar { opacity:0; pointer-events:none; transform:translateY(0)!important; }
   body.kb-open .content { padding-bottom: calc(var(--footer-h) + 16px); }
 
-  /* ========== 每頁獨立設定區（可逐頁覆蓋；字級） ========== */
-  .step[data-page="1"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="2"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="3"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="4"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="5"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="6"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="7"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="8"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="9"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="10"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="11"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="12"]{ --title-size: 18px; --content-size: 12px; }
-  .step[data-page="13"]{ --title-size: 18px; --content-size: 12px; }
-
-  /* 指定頁 h2 置右（1=注意事項、3=個人資訊、7=其他資訊、10=上傳檔案、12=資料送出前-核檢區） */
-.step[data-page="1"] h2,
-.step[data-page="3"] h2,
-.step[data-page="7"] h2,
-.step[data-page="10"] h2,
-.step[data-page="12"] h2 {
-  text-align: left !important;
-}
-
-  /* 第10頁：範例圖片改上下 */
+  /* 範例圖片 */
   .samples{ display:grid; grid-template-columns:1fr; gap:var(--sample-gap); align-items:start; margin-top:10px; }
   .sample-box{ background:var(--sample-bg); border:1px dashed var(--control-border); border-radius:var(--sample-radius); padding:var(--sample-pad); display:flex; flex-direction:column; align-items:center; }
   .sample-img{ width:100%; height:var(--sample-max-h); object-fit:contain; image-rendering:auto; }
   .sample-cap{ margin-top:6px; font-size:var(--content-size); color:var(--muted); text-align:center; }
 
-  /* ====== 登入遮罩樣式（沿用樣式當密碼鎖） ====== */
+  /* 登入遮罩 */
   .gate{ position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.75); display:flex; align-items:center; justify-content:center; }
   .gate-card{ width:min(520px, 92vw); background:rgba(30,30,30,0.95); border:1px solid var(--border); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.45); }
   .gate h3{ margin:0 0 10px 0; font-size:16px; text-align:center; }
@@ -335,10 +279,34 @@
   .gate .row input{ display:block; margin:0 auto; text-align:center; max-width:320px; }
   .gate .error{ text-align:center; display:none; }
   .gate-actions{ display:flex; gap:10px; justify-content:center; margin-top:12px; }
+
+  /* ========== 每頁獨立設定區（可逐頁覆蓋；字級 - 補上這段與報到單同步） ========== */
+  .step[data-page="1"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="2"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="3"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="4"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="5"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="6"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="7"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="8"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="9"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="10"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="11"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="12"]{ --title-size: 15px; --content-size: 12px; }
+  .step[data-page="13"]{ --title-size: 15px; --content-size: 12px; }
+
+  /* 個別頁面標題置右 */
+  .step[data-page="1"] h2,
+  .step[data-page="3"] h2,
+  .step[data-page="7"] h2,
+  .step[data-page="10"] h2,
+  .step[data-page="12"] h2 {
+    text-align: left !important;
+  }
   </style>
 </head>
+
 <body>
-  <!-- 密碼進入遮罩 -->
   <div class="gate" id="passGate">
     <div class="gate-card">
       <h3>輸入密碼後即可填寫</h3>
@@ -346,7 +314,7 @@
       <div class="row">
         <label for="gatePwd">輸入金鑰🔑</label>
         <input id="gatePwd" type="password" placeholder="請輸入密碼" />
-        <button type="button" id="togglePwdVisibility">顯示密碼</button>
+        <button class="btn" type="button" id="togglePwdVisibility" style="margin-top:10px;">顯示密碼</button>
         <div class="error" id="gatePwdErr">❌ 密碼錯誤,請再試一次</div>
       </div>
       <div class="gate-actions">
@@ -355,14 +323,13 @@
     </div>
   </div>
 
-  <div class="container" role="region" aria-label="勞工名卡建檔 分步表單" data-scheme="black">
+  <div class="container" role="region" aria-label="勞工名卡建檔表 分步表單" data-scheme="black">
     <header class="header">
-      <div class="header-title">📝 勞工名卡建檔</div>
+      <div class="header-title">📝 勞工名卡建檔表</div>
       <div class="header-step" id="headerStep">第01頁/共13頁</div>
     </header>
 
     <main class="content" id="content">
-      <!-- 第1頁 -->
       <section class="step active" data-page="1" id="step-1">
         <h2>　　 ⏰ 注意事項</h2>
         <ol class="note-list">
@@ -382,7 +349,6 @@
         </div>
       </section>
 
-      <!-- 第2頁：基本資料① -->
       <section class="step" data-page="2" id="step-2">
         <div class="row">
           <label for="company">© 公司名稱 <small>⏍ 請確認後再行點選</small></label>
@@ -432,7 +398,6 @@
         </div>
       </section>
 
-      <!-- 第3頁：個人資訊 -->
       <section class="step" data-page="3" id="step-3">
         <h2>　　 🪧 個人資訊</h2>
         <ol class="note-list">
@@ -443,14 +408,13 @@
         <div class="fieldset center-block">
           <div class="fz-note" style="font-weight:800; text-align:center">是否同意上述事項</div>
           <div class="radio-row fz-note" role="radiogroup">
-            <label class="fz-note"<input type="radio" name="agreeInfo" value="yes"> 是</label>
-            <label class="fz-note"<input type="radio" name="agreeInfo" value="no"> 否</label>
+            <label class="fz-note"><input type="radio" name="agreeInfo" value="yes"> 是</label>
+            <label class="fz-note"><input type="radio" name="agreeInfo" value="no"> 否</label>
           </div>
           <div class="error fz-xs" id="errAgreeInfo">⚠️ 需同意才可繼續填寫</div>
         </div>
       </section>
 
-      <!-- 第4頁：個資① -->
       <section class="step" data-page="4" id="step-4">
         <div class="row">
           <label for="fullName">© 本名</label>
@@ -482,7 +446,6 @@
         </div>
       </section>
 
-      <!-- 第5頁：個資② -->
       <section class="step" data-page="5" id="step-5">
         <div class="row">
           <label for="birthRoc7">© 民國出生年月日 <small>⏍ 請以yyyMMdd格式填寫,共7碼</small></label>
@@ -509,7 +472,6 @@
         </div>
       </section>
 
-      <!-- 第6頁：聯絡與學歷 -->
       <section class="step" data-page="6" id="step-6">
         <div class="row">
           <label for="gmail">© Gmail <small>⏍ 限定Gmail,請填寫常用信箱,寄發薪資單或契約用</small></label>
@@ -530,7 +492,6 @@
         </div>
       </section>
 
-      <!-- 第7頁：其他資訊 -->
       <section class="step" data-page="7" id="step-7">
         <h2>　　 🚨 其他資訊</h2>
         <ol class="note-list">
@@ -539,7 +500,7 @@
           <li>若對表單有疑問不確定資訊,請先詢問後再填寫.</li>
         </ol>
         <div class="fieldset center-block">
-          <div style="font-weight:800; margin-bottom:8px;;text-align:center">是否同意上述事項</div>
+          <div class="fz-note" style="font-weight:800; margin-bottom:8px; text-align:center">是否同意上述事項</div>
           <div class="radio-row fz-note" role="radiogroup">
             <label class="fz-note"><input type="radio" name="agreeOther" value="yes"> 是</label>
             <label class="fz-note"><input type="radio" name="agreeOther" value="no"> 否</label>
@@ -548,7 +509,6 @@
         </div>
       </section>
 
-      <!-- 第8頁：緊急聯絡人 -->
       <section class="step" data-page="8" id="step-8">
         <div class="row">
           <label for="emgName">© 緊急連絡人</label>
@@ -581,7 +541,6 @@
         </div>
       </section>
 
-      <!-- 第9頁：眷屬加保 -->
       <section class="step" data-page="9" id="step-9">
         <div class="row">
           <label for="depEnable">© 眷屬是否依附加保</label>
@@ -601,7 +560,7 @@
           </div>
 
           <div class="row">
-            <label for="depName">© 眷屬姓名</label><small>⏍ 若有兩人以上,同上</small></label>
+            <label for="depName">© 眷屬姓名<small>⏍ 若有兩人以上,同上</small></label>
             <input id="depName" type="text" placeholder="範例 ☛孫悟空,孫悟飯" />
             <div class="error" id="errDepName">⚠️ 此欄不得為空</div>
           </div>
@@ -620,7 +579,6 @@
         </div>
       </section>
 
-      <!-- 第10頁：上傳檔案 -->
       <section class="step" data-page="10" id="step-10">
         <h2>　　 ⏫ 上傳檔案</h2>
         <ol class="note-list">
@@ -631,7 +589,6 @@
           <li>哀鳳手機請用手機內建備忘錄掃描.</li>
         </ol>
 
-        <!-- 範例改上下 -->
         <div class="samples" aria-label="身分證範本">
           <figure class="sample-box">
             <img class="sample-img" src="assets/身分證範本-正面.jpg" alt="❗️範例-身分證上傳限定規格-正面">
@@ -652,16 +609,15 @@
         </div>
 
         <div class="fieldset" style="margin-top:16px;">
-          <div styles="fz-note" style="font-weight:800; text-align:center;">是否同意上述事項</div>
+          <div class="fz-note" style="font-weight:800; text-align:center;">是否同意上述事項</div>
           <div class="radio-row" role="radiogroup">
             <label class="fz-note"><input type="radio" name="agreeUpload" value="yes"> 是</label>
             <label class="fz-note"><input type="radio" name="agreeUpload" value="no"> 否</label>
           </div>
-          <div class="error fz-xs"" id="errAgreeUpload" style="text-align:center;">⚠️ 需同意才能繼續填寫</div>
+          <div class="error fz-xs" id="errAgreeUpload" style="text-align:center;">⚠️ 需同意才能繼續填寫</div>
         </div>
       </section>
 
-      <!-- 第11頁：上傳身分證正面/反面 -->
       <section class="step" data-page="11" id="step-11">
         <div class="file-row">
           <div>身分證正面</div>
@@ -700,7 +656,6 @@
         </div>
       </section>
 
-      <!-- 第12頁：❗️資料送出前-核檢區 -->
       <section class="step" data-page="12" id="step-12">
         <h2>❗️資料送出前-核檢區</h2>
         <div class="fieldset">
@@ -712,15 +667,13 @@
             <label><input type="checkbox" id="preE"> 5. 本表單有提供檢核表,請確實檢查後再勾選.</label>
             <label><input type="checkbox" id="preF"> 5-1. 若勾選後還填寫錯誤,請自負責任.</label>
             <label><input type="checkbox" id="preG"> 6. 提交表單後無法更改資訊,請確認填寫資料正確再提交.</label>
-            <label><input type="checkbox" id="preG"> 7. 提交表單後,請完成截圖回報機制.</label>
           </div>
         </div>
-        <div class="right-actions" style="display:flex; gap:10px; justify-content:center; position:relative; bottom:0">
-          <button class="btn btn--nav" id="btnSubmit" type="button"disabled>提交</button>
+        <div class="right-actions" style="display:flex; gap:10px; justify-content:center; position:relative; bottom:0; margin-top:20px;">
+          <button class="btn btn--nav" id="btnSubmit" type="button" disabled>提交</button>
         </div>
       </section>
 
-      <!-- 第13頁：全數完成 -->
       <section class="step" data-page="13" id="step-13">
         <h2>✅ 全數完成</h2>
         <div style="text-align:center; line-height:1.8;">
@@ -736,28 +689,25 @@
       </section>
     </main>
 
-    <!-- 底部固定操作列（全頁共用） -->
     <div class="actionbar" id="actionbar">
       <div class="left-actions">
         <button class="btn btn--nav" id="btnPrev" type="button">上一頁</button>
       </div>
       <div class="right-actions" style="display:flex; gap:10px;">
         <button class="btn btn--nav" id="btnNext" type="button">下一頁</button>
-        <!-- 已依需求移除「完成」按鈕 -->
       </div>
     </div>
 
     <footer class="footer" id="footer">
-  <img src="assets/MYs_logo_去背1.png" alt="MYs Logo" style="height: 20px; margin-right: 8px; vertical-align: middle;" />
-  ︳© Copyright 2025 MYs System-b1.0.0-11-13~11-26
-</footer>
-</div>
+      <img src="assets/MYs_logo_去背1.png" alt="MYs Logo" style="height: 20px; margin-right: 8px; vertical-align: middle;" />
+      © Copyright 2025 MYs System-b1.0.0-11-13
+    </footer>
+  </div>
 
 <script>
 /* --------系統常數-------- */
 const TOTAL_STEPS = 13;
-/* ★★★ 請將此處換成您最新的 GAS 部署網址 ★★★ */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwptYsUxW572V-UjYzA-qDCVVbyWhIm-HRx-QNgKvMO2v2Y_tEtntXzKNWDHG_NM9Sk/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzXg7aWhpxPzw9e1TrdAcaNnz_ah_PU1cdwW0nQ322zjYr02w-jOipapZd7PuLQut10/exec";
 
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -817,19 +767,17 @@ function fileToBase64(file) {
     });
 }
 
-/* ====== 提交資料邏輯 (取代原本的 alert) ====== */
+/* ====== 提交資料邏輯 ====== */
 async function submitData() {
     const btn = $("#btnSubmit");
     if (!btn) return;
 
-    /* 1. 鎖定按鈕，顯示轉圈圈 */
     const originalText = btn.textContent;
     btn.textContent = "⏳ 資料傳送中...";
     btn.disabled = true;
 
-    /* 2. 收集資料 */
     const payload = {
-        formType: "nameCard", /* 關鍵：通知 GAS 這是勞工名卡 */
+        formType: "nameCard", 
         createdAt: FORM_META.createdAt ? fmtTW(FORM_META.createdAt) : '',
         
         company:    $("#company").value,
@@ -852,15 +800,12 @@ async function submitData() {
         mobile:     $("#mobile").value,
         edu:        $("#edu").value,
         
-        /* 眷屬 */
         depEnable:  $("#depEnable").value,
         depRel:     $("#depRel").value,
         depName:    $("#depName").value,
         depNid:     $("#depNid").value,
-        /* depBirth7 用戶要求欄位列表中無此項，但若有填仍可傳送，GAS端若無對應欄位會忽略 */
         depBirth7:  $("#depBirth7")?.value || "", 
 
-        /* 緊急聯絡 */
         emgName:    $("#emgName").value,
         emgRel:     $("#emgRel").value,
         homePhone:  $("#homePhone").value,
@@ -872,26 +817,21 @@ async function submitData() {
     };
 
     try {
-        /* 3. 處理檔案轉檔 */
         const f1 = $("#idFront").files[0];
         const f2 = $("#idBack").files[0];
 
         if (f1) payload.fileFront = await fileToBase64(f1);
         if (f2) payload.fileBack  = await fileToBase64(f2);
 
-        /* 4. 發送 */
         const response = await fetch(GAS_URL, {
             method: "POST",
             body: JSON.stringify(payload)
         });
         const res = await response.json();
 
-        /* 5. 處理結果 */
         if (res.status === 'ok') {
-            /* 成功：跳轉到完成頁 (第13頁) */
             showStep(13);
         } else {
-            /* 失敗：顯示錯誤 (例如重複填寫) */
             alert("❌ " + (res.status === 'duplicate' ? "你/妳已經填寫過..." : "錯誤: " + res.message));
             btn.textContent = originalText;
             btn.disabled = false;
@@ -904,7 +844,6 @@ async function submitData() {
     }
 }
 
-/* 綁定提交按鈕 (第12頁) */
 document.getElementById('btnSubmit')?.addEventListener('click', (e) => {
     e.preventDefault();
     submitData();
@@ -927,7 +866,6 @@ document.getElementById('btnSubmit')?.addEventListener('click', (e) => {
   apply();
 })();
 
-/* 焦點自動可視 */
 (function focusAutoScroll(){
   document.addEventListener('focusin', (e)=>{
     const el = e.target;
@@ -1213,7 +1151,6 @@ function updateNavState(){
   btnNext.disabled    = IS_LOCKED || !validatePage(currentPage, false);
   if(onLast){ btnPrev.style.display="none"; } else { btnPrev.style.display="inline-block"; }
   
-  /* 特殊：第12頁控制提交按鈕 */
   if(currentPage === 12){
       const btnSubmit = $("#btnSubmit");
       const isValid12 = validatePage(12, false);
@@ -1293,7 +1230,6 @@ function bindLiveValidation(){
   bindPreview("#idBack","#nameBackTxt","#thumbBack");
   ["#chk1","#chk2","#chk3","#chk4"].forEach(sel=> $(sel)?.addEventListener('change', updateNavState));
 
-  /* 第12頁 Checkbox */
   ["#preA","#preB","#preC","#preD","#preE","#preF","#preG"].forEach(sel=>{
     $(sel)?.addEventListener('change', ()=>{ updateNavState(); });
   });
