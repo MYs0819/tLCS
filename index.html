@@ -7,7 +7,7 @@
 
   <style>
       :root {
-          /* -----------GAS部署網址在719行------------ */
+          /* -----------GAS部署網址在769行------------ */
           /* --------系統共用常數（可全站調整）-------- */
           --card-w: 980px;        /* 表單面板最大寬度（可調） */
           --radius: 16px;         /* 面板圓角（可調） */
@@ -380,12 +380,6 @@
             </div>
         </div>
     </div>
-      
-      <div class="gate-actions">
-        <button class="btn" id="gatePwdStart" type="button" style="padding:8px 24px;">確定</button>
-      </div>
-    </div>
-  </div>
 
   <div class="container" role="region" aria-label="勞工名卡建檔表 分步表單" data-scheme="black">
     <header class="header">
@@ -764,7 +758,7 @@
 
     <footer class="footer" id="footer">
       <img src="assets/MYs_logo_去背.png" alt="MYs Logo" style="height: 20px; margin-right: 8px; vertical-align: middle;" />
-      ︳© Copyright 2025 MYs System-b1.0.92-11/13~11/27
+      ︳© Copyright 2025 MYs System-b1.0.93-11/13~11/28
     </footer>
   </div>
 
@@ -793,7 +787,7 @@ function updateStampUI(){
 }
 
 /* ====== 密碼進入遮罩 ====== */
-const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115" , "0819"]; 
+const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115" , "0819", "0404"]; 
 (function passGateInit(){
   const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
   const togglePwdButton = $("#togglePwdVisibility");
