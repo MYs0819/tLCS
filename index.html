@@ -371,7 +371,7 @@
             <p>請向人資承辦索取密碼🔐</p>
             <div class="row">
                 <label for="gatePwd">請輸入金鑰🔑</label>
-                <input id="gatePwd" type="password" placeholder="請輸入密碼" />
+                <input id="gatePwd" type="password" placeholder="請輸入人資承辦的四位數生日" />
                 <button type="button" id="togglePwdVisibility">顯示密碼</button>
                 <div class="error" id="gatePwdErr">❌ 密碼錯誤，請再試一次</div>
             </div>
@@ -764,7 +764,7 @@
 
     <footer class="footer" id="footer">
       <img src="assets/MYs_logo_去背.png" alt="MYs Logo" style="height: 20px; margin-right: 8px; vertical-align: middle;" />
-      © Copyright 2025 MYs System-b1.0.83-11/13~11/27
+      © Copyright 2025 MYs System-b1.0.84-11/13~11/27
     </footer>
   </div>
 
@@ -793,7 +793,7 @@ function updateStampUI(){
 }
 
 /* ====== 密碼進入遮罩 ====== */
-const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115"]; 
+const PASSWORDS = ["MYsDC20251115", "MYsFZ20251115", "MYsSC20251115" , "0819"]; 
 (function passGateInit(){
   const gate = $("#passGate"), pwd = $("#gatePwd"), btn = $("#gatePwdStart"), err = $("#gatePwdErr");
   const togglePwdButton = $("#togglePwdVisibility");
