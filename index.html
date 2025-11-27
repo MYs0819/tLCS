@@ -276,31 +276,66 @@
   .sample-img{ width:100%; height:var(--sample-max-h); object-fit:contain; image-rendering:auto; }
   .sample-cap{ margin-top:6px; font-size:var(--content-size); color:var(--muted); text-align:center; }
 
-/* ====== 登入遮罩樣式 (已加上間距調整註解) ====== */
-  .gate{ position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.75); display:flex; align-items:center; justify-content:center; }
-  .gate-card{ width:min(300px, 85vw); background:rgba(30,30,30,0.95); border:1px solid var(--border); border-radius:16px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.45); }
-  
-  /* 1. 標題：輸入密碼後即可填寫 */
-  .gate h3{ margin:0 0 8px 0; font-size:18px; text-align:center; color:#fff; } /* margin-bottom: 12px 是與下一行的距離 */
-  
-  /* 2. 副標：請向人資承辦... */
-  .gate p{ margin:0 0 8px 0; color:var(--muted); font-size:14px; text-align:center; } /* margin-bottom: 12px 是與下一行的距離 */
-  
-  .gate .row{ text-align:center; display:flex; flex-direction:column; align-items:center; }
-  
-  /* 3. 標籤：輸入金鑰 */
-  .gate .row label{ text-align:center; margin-bottom: 8px; font-size:15px; } /* margin-bottom: 12px 是與輸入框的距離 */
-  
-  /* 4. 輸入框 */
-  .gate .row input{ 
-      display:block; margin:0 auto 10px auto; /* margin-bottom: 12px 是與顯示密碼按鈕的距離 */
-      text-align:center; width:100%; max-width:220px; 
-  }
-  
-  .gate .error{ text-align:center; display:none; margin-top:8px;}
-  
-  /* 6. 底部按鈕區 (確定) */
-  .gate-actions{ display:flex; gap:10px; justify-content:center; margin-top:16px; } /* margin-top: 12px 是與上方的距離 */
+/* ====== 登入遮罩樣式 ====== */
+        .gate {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;border-radius
+        }
+
+        .gate-card {
+            width: min(520px, 92vw);
+            background: rgba(30,30,30,0.95);
+            border: 1px solid var(--border);
+            : 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.45);
+        }
+
+        .gate h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .gate p {
+            margin: 6px 0;
+            color: var(--muted);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .gate .row {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+            .gate .row label {
+                text-align: center;
+            }
+
+            .gate .row input {
+                display: block;
+                margin: 0 auto;
+                text-align: center;
+                max-width: 320px;
+            }
+
+        .gate .error {
+            text-align: center;
+            display: none;
+        }
+
+        .gate-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 12px;
+        }
 
   /* ========== 每頁獨立設定區（可逐頁覆蓋；字級） ========== */
   /* 說明：將 title-size 改為 22px，content-size 改為 15px，完全符合報到須知單的視覺大小（可調） ★★★ */
@@ -332,7 +367,7 @@
 <body>
 <div class="gate" id="passGate">
     <div class="gate-card">
-            <h3>2輸入密碼後即可填寫</h3>
+            <h3>3輸入密碼後即可填寫</h3>
             <p>請向人資承辦索取密碼🔐</p>
             <div class="row">
                 <label for="gatePwd">請輸入金鑰🔑</label>
